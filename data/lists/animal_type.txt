@@ -1,0 +1,9 @@
+Beaver
+Cat
+cow
+Dog
+Mice
+ragondin
+Rat
+Sheep
+poulet
