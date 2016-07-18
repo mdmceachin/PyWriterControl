@@ -6,7 +6,8 @@
 ################################################################################################
 
 import serial
-
+from intf_widgets import Interface_ComboBox
+import time
 ################################################################################################
 ################################################################################################
 ################################################################################################
@@ -20,7 +21,7 @@ class PortFunctions():
 		self.port = 'COM1'
 		self.port_state = ''
 		self.writer_status = []
-		pass
+		self.object_number = ''
 		
 	def port_set(self, port):
 		self.port = port
@@ -128,6 +129,7 @@ class ConnectPort():
 		self.port.dtr = True
 		self.port.port = 'COM1' # default
 		self.writer_status = []
+		self.count = 0
 						
 	def open_port(self, port):
 		self.port.port = port
@@ -148,7 +150,7 @@ class ConnectPort():
 			pass
 			#print("Port "  + "[" +  self.port.port + "]" + " already closed, nothing to do.")
 			
-	def send_writer(self, port, COMMANDLINE):
+	def send_writer(self, port, COMMANDLINE):	 
 		try:
 			self.open_port(port)
 			self.port.write(COMMANDLINE.encode('ascii'))

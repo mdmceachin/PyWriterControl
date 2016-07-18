@@ -43,7 +43,9 @@ class Interface_WaitingList(metaclass = IterableWaitingList):
 		self.parent = parent
 		self.name = name
 		self.real_send_list = []
-
+		self.object_number_list = []
+		self.cassette_label_container = []
+	
 	def waitinglist(self):
 		# The proper waitinglist (tkinter widgets) definition
 		waitinglist_subframe=tk.Frame(self.parent)
@@ -78,20 +80,26 @@ class Interface_WaitingList(metaclass = IterableWaitingList):
 		# Remove the first value from the list
 		# And the corresponding entry in the "real" list
 		try:
-			index = self.waitinglist.curselection()[0]
-			self.waitinglist.delete(index)
-			del self.real_send_list[index]
-			
+			if self.waitinglist.get(0) == '###   ###   ###':
+				index = self.waitinglist.curselection()[0] # [0] is here to select the first value of the returned tuple
+				self.waitinglist.delete(index)
+				del self.real_send_list[index+1]
+				del self.object_number_list[index+1]
+			else:
+				index = self.waitinglist.curselection()[0]
+				self.waitinglist.delete(index)
+				del self.real_send_list[index]
+				del self.object_number_list[index]
 		except IndexError:
 			pass
-			
+				
 	def delete_list(self):
 		# Just remove all value, from 0 to the end
 		# Also erase the values from the real list
 		try:
 			self.waitinglist.delete(0,tk.END)
 			del self.real_send_list[:]
-			
+			del self.object_number_list[:]
 		except IndexError:
 			pass
   

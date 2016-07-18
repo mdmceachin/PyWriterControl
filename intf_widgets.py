@@ -60,7 +60,7 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 		
 		self.object_number = ['01', '02', '03', '04', '05', '06', '07', '08', '09']
 		
-		for i in range (10,100):
+		for i in range (10,51):
 			self.object_number.append(i)
 		
 		self.hopper_number = []
@@ -198,6 +198,23 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 	
 	def newselection(self, event):
 		self.value_of_combo = self.box.get()
+		for classname in [classname for classname in Interface_ComboBoxCST]:
+			classname.get_current_index()
+		for classname in [classname for classname in Interface_ComboBoxSDL]:
+			classname.get_current_index()
+			
+		for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in ['',-1]]:
+			classname.box.delete(0)
+			classname.get_fields()
+			classname.box.update_idletasks()
+			classname.box.current(classname.value_of_current_selection)
+					
+		for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in ['',-1]]:
+			classname.box.delete(0)
+			classname.get_fields()
+			classname.box.update_idletasks()
+			classname.box.current(classname.value_of_current_selection)
+			
 		return self.value_of_combo
 	
 	def textselection(self, event):
@@ -351,6 +368,7 @@ class Interface_ComboBoxCST(metaclass=IterableComboBoxCST):
 		self.valuesource = []
 		self.valuesource_edit = []
 		self.valuesourcename = ''
+		self.value_of_current_selection = ''
 		
 	def combo_object_cst(self, name, row_label, column_label, row_combo, column_combo):
 		self.box_value = tk.StringVar()
@@ -359,19 +377,35 @@ class Interface_ComboBoxCST(metaclass=IterableComboBoxCST):
 		  postcommand=self.get_fields)
 		self.box.bind("<<ComboboxSelected>>", self.newselection)
 		self.box.grid(column=column_combo, row=row_combo)
+	
+	def combo_object_updated(self):
+		self.box_value = tk.StringVar()
+		self.box = ttk.Combobox(self.parent, textvariable=self.box_value,
+		 values=self.valuesource, height=50, width=20, state='readonly', exportselection=0,
+		  postcommand=self.get_fields)
 			
 	def newselection(self, event):
 		self.value_of_combo = self.box.get()
+		self.get_current_index()
 		return self.value_of_combo
-
+	
 	def combo_object_label_update(self):
 		self.box.configure(values=self.valuesource)
 		return 'break'
 
+	def get_current_index(self):
+		self.value_of_current_selection = self.box.current()
+		return self.value_of_current_selection
+	
+	def set_current_index(self):
+		self.box.current(self.value_of_current_selection)
+		
 	def get_fields(self):
 		self.valuesource = []
 		self.valuesource_edit = []
-		
+		for classname in [classname for classname in Interface_ComboBox if classname.name == "object_number"]:
+			self.object_number = classname.box.get()
+			
 		for classname in [classname for classname in Interface_ComboBox
 		 if classname.name not in ['port_number_cassette','port_number_slidewriter',
 		  'hopper_number', 'object_number']]:
@@ -381,6 +415,7 @@ class Interface_ComboBoxCST(metaclass=IterableComboBoxCST):
 					chain = ''.join(classname.txt_size_ascii + classname.box.get() + '\x23\x49')
 					self.valuesource.append(chain)
 					self.valuesource_edit.append(classname.get_val())
+
 				else:
 					pass
 			
@@ -392,7 +427,7 @@ class Interface_ComboBoxCST(metaclass=IterableComboBoxCST):
 				else:
 					pass
 		
-		for classname in Interface_EntryBox:
+		for classname in [classname for classname in Interface_EntryBox if classname.name not in ['profile_name']]:
 			
 			if classname.value_of_checkbox == 1:
 				if classname.get_val() != '':
@@ -455,6 +490,7 @@ class Interface_ComboBoxSDL(metaclass=IterableComboBoxSDL):
 		self.list_content = []
 		self.valuesource = []
 		self.valuesourcename = ''
+		self.value_of_current_selection = ''
 		
 	def combo_object_sdl(self, name, row_label, column_label, row_combo, column_combo):	
 		self.box_value = tk.StringVar()
@@ -466,16 +502,23 @@ class Interface_ComboBoxSDL(metaclass=IterableComboBoxSDL):
 			
 	def newselection(self, event):
 		self.value_of_combo = self.box.get()
+		self.get_current_index()
 		return self.value_of_combo
 
 	def combo_object_label_update(self):
 		self.box.configure(values=self.valuesource)
 		return 'break'
 
+	def get_current_index(self):
+		self.value_of_current_selection = self.box.current()
+		return self.value_of_current_selection
+
+	def set_current_index(self):
+		self.box.current(self.value_of_current_selection)
+		
 	def get_fields(self):
 		self.valuesource = []
 		self.valuesource_edit = []
-		
 		for classname in [classname for classname in Interface_ComboBox
 		 if classname.name not in ['port_number_cassette','port_number_slidewriter',
 		  'hopper_number', 'object_number']]:
@@ -496,7 +539,7 @@ class Interface_ComboBoxSDL(metaclass=IterableComboBoxSDL):
 				else:
 					pass
 		
-		for classname in Interface_EntryBox:
+		for classname in [classname for classname in Interface_EntryBox if classname.name not in ['profile_name']]:
 			
 			if classname.value_of_checkbox == 1:
 				if classname.get_val() != '':
@@ -833,6 +876,26 @@ class IterableEntryBox(type):
 	def __iter__(self):
 		return iter(self._entrybox_registry)
 
+
+class IterableEntryBox(type):
+	@classmethod
+	def __prepare__(self, name, bases):
+		return collections.OrderedDict()
+		
+	def __new__(meta, name, bases, attrs):
+		attrs['_entrybox_registry'] = [key for key in weakref.WeakSet()
+		if key not in ('__module__', '__qualname__')]
+		
+		return type.__new__(meta, name, bases, attrs)
+
+	def __call__(cls, *args, **kwargs):
+		call_return = type.__call__(cls, *args, **kwargs)
+		cls._entrybox_registry.append(call_return)
+		return call_return
+        
+	def __iter__(self):
+		return iter(self._entrybox_registry)
+
 class Interface_EntryBox(metaclass=IterableEntryBox):
 	def __init__(self, parent, name):
 		self.name = name
@@ -851,6 +914,7 @@ class Interface_EntryBox(metaclass=IterableEntryBox):
 
 		self.entry.grid(column=column_entry, row=row_entry)
 		self.entry.bind('<KeyPress>', self.newselection)
+		self.entry.bind('<Button-1>', self.newselection)
 		self.entry_label(name, column_label, row_label)
 
 	def entry_label(self, label, column, row):
@@ -859,6 +923,19 @@ class Interface_EntryBox(metaclass=IterableEntryBox):
 
 	def newselection(self, event):
 		self.value_of_entry = self.entry.get()
+		if self.name != 'profile_name':
+			for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in ['', '-1']]:
+				classname.get_fields()
+				classname.box.update_idletasks()
+				classname.box.current(classname.value_of_current_selection)
+			
+			for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in ['', '-1']]:
+				classname.get_fields()
+				classname.box.update_idletasks()
+				classname.box.current(classname.value_of_current_selection)	
+		else:
+			pass
+		
 		return self.value_of_entry
 	
 	def get_val(self):
