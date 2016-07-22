@@ -80,16 +80,10 @@ class Interface_WaitingList(metaclass = IterableWaitingList):
 		# Remove the first value from the list
 		# And the corresponding entry in the "real" list
 		try:
-			if self.waitinglist.get(0) == '###   ###   ###':
-				index = self.waitinglist.curselection()[0] # [0] is here to select the first value of the returned tuple
-				self.waitinglist.delete(index)
-				del self.real_send_list[index+1]
-				del self.object_number_list[index+1]
-			else:
-				index = self.waitinglist.curselection()[0]
-				self.waitinglist.delete(index)
-				del self.real_send_list[index]
-				del self.object_number_list[index]
+			index = self.waitinglist.curselection()[0]
+			self.waitinglist.delete(index)
+			del self.real_send_list[index]
+			del self.object_number_list[index]
 		except IndexError:
 			pass
 				

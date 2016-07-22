@@ -1,4 +1,4 @@
-
+﻿
 #-*- coding: UTF-8 -*
 
 ################################################################################################
@@ -16,8 +16,8 @@
 # and the current application (Shandon Microwriter) is
 # not working properly.
 
-# This use Python, PySerial and other things (tk, ttk, collections, time, datetime, os, weakref)
-# that are probably included in any basic python installation.
+# This software use Python, PySerial and other things (tk, ttk, collections, time, datetime, os, weakref)
+# that are probably included in any basic python installation (except for pyserial).
 # If it's not, please be sure that everything is set up before launching
 # the software.
 # You can always install pythonic depencencies by using your favorite
@@ -49,9 +49,10 @@
 ################################################################################################
 
 from intf_widgets import (Interface_ComboBox, Interface_ListBox, Interface_EntryBox,
- Interface_RadioBox, Interface_ComboBoxCST, Interface_ComboBoxSDL)
+ Interface_RadioBox, Interface_ComboBoxCST, Interface_ComboBoxSDL, Interface_CheckBox)
 from com_funcs import PortFunctions, ConnectPort
 from itf_wait_list import Interface_WaitingList
+from itf_wt_set import Interface_TimeSetWindow
 from pywritercontrol_funcs import Special_Functions
 
 ################################################################################################
@@ -59,6 +60,9 @@ from pywritercontrol_funcs import Special_Functions
 import tkinter as tk
 import tkinter.ttk as ttk
 import os
+from threading import Thread
+import multiprocessing
+import time
 
 ################################################################################################
 ################################################################################################
@@ -109,7 +113,7 @@ subframe_7 = tk.LabelFrame(frame_right, text="Commandes", padx=5, pady=5)
 
 
 ################################################################################################
-########################### A STUPID, USELESS, AND THUS AWSESOME, FUNCTIONNALITY ###############
+########################### A STUPID, USELESS, AND THUS AWSESOME, FUNCTIONNALITY #############################
 ################################################################################################
 
 # A set of useless functions made to please the technicians here
@@ -205,10 +209,10 @@ def set_color_none():
 ################################################################################################
 ##################################### FUNCTIONS INSTANCIATION ##################################
 ################################################################################################
-
+Special_Functions = Special_Functions(main_window)
 waitinglist = Interface_WaitingList(subframe_6, 'waitinglist')
-Special_Functions = Special_Functions()
 radiobuttons_blade_slide = Interface_RadioBox(subframe_1, 'radiobuttons_blade_slide')
+
 
 ################################################################################################
 ################################################################################################
@@ -221,15 +225,15 @@ radiobuttons_blade_slide = Interface_RadioBox(subframe_1, 'radiobuttons_blade_sl
 # Class declarations
 menu_listbox_studies = Interface_ListBox('menu_listbox_studies')
 menu_listbox_delay = Interface_ListBox('menu_listbox_delay')
+menu_listbox_animal_number = Interface_ListBox('menu_listbox_animal_number')
+menu_listbox_animal_gender = Interface_ListBox('menu_listbox_animal_gender')
 menu_listbox_group = Interface_ListBox('menu_listbox_group')
-menu_listbox_rank = Interface_ListBox('menu_listbox_rank')
 menu_listbox_organs = Interface_ListBox('menu_listbox_organs')
-menu_listbox_colorations = Interface_ListBox('menu_listbox_colorations')
-menu_listbox_products = Interface_ListBox('menu_listbox_products')
+menu_listbox_rank = Interface_ListBox('menu_listbox_rank')
 menu_listbox_animaltype = Interface_ListBox('menu_listbox_animaltype')
-menu_listbox_animalgender = Interface_ListBox('menu_listbox_animalgender')
-menu_listbox_inclusion = Interface_ListBox('menu_listbox_inclusion')
-menu_listbox_batchid = Interface_ListBox('menu_listbox_batchid')
+menu_listbox_colorations = Interface_ListBox('menu_listbox_colorations')
+
+menu_time_set = Interface_TimeSetWindow('menu_time_set')
 
 # Menus
 menu_fichier = tk.Menu(barre_menu, tearoff = 0)
@@ -240,31 +244,39 @@ menu_fichier.add_command(label = "Quitter", command = exit)
 menu_edition = tk.Menu(barre_menu, tearoff = 0)
 
 barre_menu.add_cascade(label="Edition", menu = menu_edition)
-menu_listbox_studies.listbox_call("Numéros d'études", 'studies')
+
+menu_listbox_studies.listbox_call("Numéros d'études", 'study_number')
 menu_edition.add_command(label="Entrées numéros d'études", command = menu_listbox_studies.listbox)
-menu_listbox_delay.listbox_call("Délais", 'timeschedule')
+
+menu_listbox_delay.listbox_call("Délais", 'time_schedule')
 menu_edition.add_command(label="Entrées délais", command = menu_listbox_delay.listbox)
-menu_listbox_group.listbox_call("Groupe", 'group')
+
+menu_listbox_animal_number.listbox_call("Numéros animaux", 'animal_number')
+menu_edition.add_command(label="Entrées numéros animaux", command = menu_listbox_animal_number.listbox)
+
+menu_listbox_animal_gender.listbox_call("Genres animaux", 'animal_gender')
+menu_edition.add_command(label="Entrées genres", command = menu_listbox_animal_gender.listbox)
+
+menu_listbox_group.listbox_call("Groupes", 'group')
 menu_edition.add_command(label="Entrées groupe animaux", command = menu_listbox_group.listbox)
-menu_listbox_rank.listbox_call("Rang", 'rank')
-menu_edition.add_command(label="Entrées rang de coupe", command = menu_listbox_rank.listbox)
+
 menu_listbox_organs.listbox_call("Organes", 'organs')
 menu_edition.add_command(label="Entrées organes", command = menu_listbox_organs.listbox)
+
+menu_listbox_rank.listbox_call("Rang", 'rank')
+menu_edition.add_command(label="Entrées rang de coupe", command = menu_listbox_rank.listbox)
+
 menu_listbox_colorations.listbox_call("Colorations", 'coloration')
 menu_edition.add_command(label="Entrées colorations", command = menu_listbox_colorations.listbox)
-menu_listbox_products.listbox_call("Produits testés", 'tested_product')
-menu_edition.add_command(label="Entrées produits  testés", command = menu_listbox_products.listbox)
-menu_listbox_animaltype.listbox_call("Animal", 'animal_type')
-menu_edition.add_command(label="Entrées animaux", command = menu_listbox_animaltype.listbox)
-menu_listbox_animalgender.listbox_call("Animal", 'animal_gender')
-menu_edition.add_command(label="Entrées genres", command = menu_listbox_animalgender.listbox)
-menu_listbox_inclusion.listbox_call("Animal", 'inclusion')
-menu_edition.add_command(label="Entrées inclusion", command = menu_listbox_inclusion.listbox)
-menu_listbox_batchid.listbox_call("Série", 'batch_id')
-menu_edition.add_command(label="Entrées séries", command = menu_listbox_batchid.listbox)
+
+menu_listbox_animaltype.listbox_call("Espèces", 'animal_type')
+menu_edition.add_command(label="Entrées espèces", command = menu_listbox_animaltype.listbox)
+
+
 
 menu_div = tk.Menu(barre_menu, tearoff = 0)
 barre_menu.add_cascade(label="Divers", menu = menu_div)
+menu_div.add_command(label="Réglages des temps de gravure", command = menu_time_set.timewindow)
 menu_div.add_command(label="Interface : bleue", command = set_color_blue)
 menu_div.add_command(label="Interface : rose", command = set_color_pink)
 menu_div.add_command(label="Interface : vert", command = set_color_green)
@@ -299,17 +311,20 @@ time_sched = Interface_ComboBox(subframe_2, 'time_sched')
 group = Interface_ComboBox(subframe_2, 'group')
 gender = Interface_ComboBox(subframe_2, 'gender')
 organs = Interface_ComboBox(subframe_2, 'organs')
-inclusion = Interface_ComboBox(subframe_2, 'inclusion')
 coloration = Interface_ComboBox(subframe_2, 'coloration')
 rank = Interface_ComboBox(subframe_2, 'rank')
-tested_product = Interface_ComboBox(subframe_2, 'tested_product')
-batch_id = Interface_ComboBox(subframe_2, 'batch_id')
+animal_number = Interface_ComboBox(subframe_2, 'animal_number')
 
 profile_name = Interface_EntryBox(subframe_1, 'profile_name')
 sup_data1 = Interface_EntryBox(subframe_2, 'sup_data1')
 sup_data2 = Interface_EntryBox(subframe_2, 'sup_data2')
 sup_data3 = Interface_EntryBox(subframe_2, 'sup_data3')
 sup_data4 = Interface_EntryBox(subframe_2, 'sup_data4')
+
+# Specific checkbox to allow sending twice the command
+# Simplify the process in case of two colorations (HES, TM) are made
+hes_and_trichrome_option = Interface_CheckBox(subframe_5, 'hes_and_trichrome_option')
+
 
 # Boxes : port, objects number, hopper, profile name
 port_number_cassette.combo_ro("Port série graveur de cassettes : ", 'P', 0,1,0,1,1)
@@ -324,64 +339,54 @@ radiobuttons_blade_slide.radiobox("Cassette(s)", "Lame(s)", "Cassette(s)+Lame(s)
 # Labels
 tk.Label(subframe_2, text="Valeur").grid(row=0,column=1)
 tk.Label(subframe_2, text="Taille texte").grid(row=0,column=2)
-tk.Label(subframe_2, text="Incrémenter (#I)").grid(row=0,column=3)
+tk.Label(subframe_2, text="Incrémenter").grid(row=0,column=3)
 
 
 # Comboboxes : text fields
-animal_type.combo_rw("Espèce : ",'animal_type',0,1,0,1,1)
-animal_type.combo_txt('T', 4,1,4,1,2)
-animal_type.box_txt.configure(width=10)
-animal_type.checkbox(1,3)
-
-study_number.combo_rw("Numéro d'étude : ",'studies',0,2,0,2,1)
-study_number.combo_txt('T', 4,2,4,2,2)
+study_number.combo_rw("Numéro d'étude : ",'study_number',0,1,0,1,1)
+study_number.combo_txt('T', 4,1,4,1,2)
 study_number.box_txt.configure(width=10)
-study_number.checkbox(2,3)
+study_number.checkbox(1,3)
 
-time_sched.combo_rw("Délai : ",'timeschedule',0,3,0,3,1)
-time_sched.combo_txt('T', 4,3,4,3,2)
+time_sched.combo_rw("Délai : ",'time_schedule',0,2,0,2,1)
+time_sched.combo_txt('T', 4,2,4,2,2)
 time_sched.box_txt.configure(width=10)
-time_sched.checkbox(3,3)
+time_sched.checkbox(2,3)
 
-group.combo_rw("Groupe : ",'group',0,4,0,4,1)
-group.combo_txt('T', 4,4,4,4,2)
-group.box_txt.configure(width=10)
-group.checkbox(4,3)
+animal_number.combo_rw("Numéro animal : ", "animal_number", 0,3,0,3,1)
+animal_number.combo_txt('T', 4,3,4,3,2)
+animal_number.box_txt.configure(width=10)
+animal_number.checkbox(3,3)
 
-gender.combo_rw("Genre (M/F/?) : ",'animal_gender',0,5,0,5,1)
-gender.combo_txt('T', 4,5,4,5,2)
+gender.combo_rw("Genre : ",'animal_gender',0,4,0,4,1)
+gender.combo_txt('T', 4,4,4,4,2)
 gender.box_txt.configure(width=10)
-gender.checkbox(5,3)
+gender.checkbox(4,3)
+
+group.combo_rw("Groupe : ",'group',0,5,0,5,1)
+group.combo_txt('T', 4,5,4,5,2)
+group.box_txt.configure(width=10)
+group.checkbox(5,3)
 
 organs.combo_rw("Organe(s) : ", 'organs',0,6,0,6,1)
 organs.combo_txt('T', 4,6,4,6,2)
 organs.box_txt.configure(width=10)
 organs.checkbox(6,3)
 
-inclusion.combo_rw(" Inclusion Paraffine/Résine (P/R) : ", 'inclusion',0,7,0,7,1)
-inclusion.combo_txt('T', 4,7,4,7,2)
-inclusion.box_txt.configure(width=10)
-inclusion.checkbox(7,3)
+rank.combo_rw("Rang : ", 'rank',0,7,0,7,1)
+rank.combo_txt('T', 4,7,4,7,2)
+rank.box_txt.configure(width=10)
+rank.checkbox(7,3)
 
 coloration.combo_rw("Coloration : ", 'coloration',0,8,0,8,1)
 coloration.combo_txt('T', 4,8,4,8,2)
 coloration.box_txt.configure(width=10)
 coloration.checkbox(8,3)
 
-rank.combo_rw("Rang : ", 'rank',0,9,0,9,1)
-rank.combo_txt('T', 4,9,4,9,2)
-rank.box_txt.configure(width=10)
-rank.checkbox(9,3)
-
-tested_product.combo_rw("Produit(s) testé(s) : ", 'tested_product', 0,10,0,10,1)
-tested_product.combo_txt('T', 4,10,4,10,2)
-tested_product.box_txt.configure(width=10)
-tested_product.checkbox(10,3)
-
-batch_id.combo_rw("Identifiant série : ", 'batch_id', 0,11,0,11,1)
-batch_id.combo_txt('T', 4,11,4,11,2)
-batch_id.box_txt.configure(width=10)
-batch_id.checkbox(11,3)
+animal_type.combo_rw("Espèce : ",'animal_type',0,9,0,9,1)
+animal_type.combo_txt('T', 4,9,4,9,2)
+animal_type.box_txt.configure(width=10)
+animal_type.checkbox(9,3)
 
 # Entryboxes : free text
 sup_data1.entry_free("Champ libre (1) : ",12,0,12,1)
@@ -403,6 +408,9 @@ sup_data4.entry_free("Champ libre (4) : ",15,0,15,1)
 sup_data4.combo_txt('T', 4,15,4,15,2)
 sup_data4.box_txt.configure(width=10)
 sup_data4.checkbox(15,3)
+
+tk.Label(subframe_5, text="HES + trichrome ?").grid(row=0,column=0)
+hes_and_trichrome_option.checkbox(0,1)
 
 ################################################################################################
 ################################################################################################
@@ -464,42 +472,57 @@ slidelabel_field17 = Interface_ComboBoxSDL(subframe_4_tab2, "slidelabel_field17"
 slidelabel_field18 = Interface_ComboBoxSDL(subframe_4_tab2, "slidelabel_field18")
 slidelabel_field19 = Interface_ComboBoxSDL(subframe_4_tab2, "slidelabel_field19")
 slidelabel_field20 = Interface_ComboBoxSDL(subframe_4_tab2, "slidelabel_field20")
+slidelabel_field21 = Interface_ComboBoxSDL(subframe_4_tab2, "slidelabel_field21")
+slidelabel_field22 = Interface_ComboBoxSDL(subframe_4_tab2, "slidelabel_field22")
+slidelabel_field23 = Interface_ComboBoxSDL(subframe_4_tab2, "slidelabel_field23")
+slidelabel_field24 = Interface_ComboBoxSDL(subframe_4_tab2, "slidelabel_field24")
+slidelabel_field25 = Interface_ComboBoxSDL(subframe_4_tab2, "slidelabel_field25")
+
 
 # Cassette organisation, line 1
 cassettelabel_field1.combo_object_cst("Line 1 : ",0,0,0,1)
 cassettelabel_field2.combo_object_cst("Line 1 : ",0,0,0,2)
 cassettelabel_field3.combo_object_cst("Line 1 : ",0,0,0,3)
 cassettelabel_field4.combo_object_cst("Line 1 : ",0,0,0,4)
-# Cassette organisation, Line 2
-cassettelabel_field5.combo_object_cst("Line 2 : ",1,0,1,1)
-cassettelabel_field6.combo_object_cst("Line 2 : ",1,0,1,2)
-cassettelabel_field7.combo_object_cst("Line 2 : ",1,0,1,3)
-cassettelabel_field8.combo_object_cst("Line 2 : ",1,0,1,4)
-# Cassette organisation, Line 3
-cassettelabel_field9.combo_object_cst("Line 3 : ",2,0,2,1)
-cassettelabel_field10.combo_object_cst("Line 3 : ",2,0,2,2)
-cassettelabel_field11.combo_object_cst("Line 3 : ",2,0,2,3)
-cassettelabel_field12.combo_object_cst("Line 3 : ",2,0,2,4)
+cassettelabel_field5.combo_object_cst("Line 1 : ",0,0,0,5)
 
+# Cassette organisation, Line 2
+cassettelabel_field6.combo_object_cst("Line 2 : ",1,0,1,1)
+cassettelabel_field7.combo_object_cst("Line 2 : ",1,0,1,2)
+cassettelabel_field8.combo_object_cst("Line 2 : ",1,0,1,3)
+cassettelabel_field9.combo_object_cst("Line 2 : ",1,0,1,4)
+cassettelabel_field10.combo_object_cst("Line 2 : ",1,0,1,5)
+
+# Cassette organisation, Line 3
+cassettelabel_field11.combo_object_cst("Line 3 : ",2,0,2,1)
+cassettelabel_field12.combo_object_cst("Line 3 : ",2,0,2,2)
+cassettelabel_field13.combo_object_cst("Line 3 : ",2,0,2,3)
+cassettelabel_field14.combo_object_cst("Line 3 : ",2,0,2,4)
+cassettelabel_field15.combo_object_cst("Line 3 : ",2,0,2,5)
 
 # Cassette organisation, Line 4
-cassettelabel_field13.combo_object_cst("Line 4 : ",3,0,3,1)
-cassettelabel_field13.box.configure(state='disabled')
-cassettelabel_field14.combo_object_cst("Line 4 : ",3,0,3,2)
-cassettelabel_field14.box.configure(state='disabled')
-cassettelabel_field15.combo_object_cst("Line 4 : ",3,0,3,3)
-cassettelabel_field15.box.configure(state='disabled')
-cassettelabel_field16.combo_object_cst("Line 4 : ",3,0,3,4)
+cassettelabel_field16.combo_object_cst("Line 4 : ",3,0,3,1)
 cassettelabel_field16.box.configure(state='disabled')
-# Cassette organisation, Line 5
-cassettelabel_field17.combo_object_cst("Line 5 : ",4,0,4,1)
+cassettelabel_field17.combo_object_cst("Line 4 : ",3,0,3,2)
 cassettelabel_field17.box.configure(state='disabled')
-cassettelabel_field18.combo_object_cst("Line 5 : ",4,0,4,2)
+cassettelabel_field18.combo_object_cst("Line 4 : ",3,0,3,3)
 cassettelabel_field18.box.configure(state='disabled')
-cassettelabel_field19.combo_object_cst("Line 5 : ",4,0,4,3)
+cassettelabel_field19.combo_object_cst("Line 4 : ",3,0,3,4)
 cassettelabel_field19.box.configure(state='disabled')
-cassettelabel_field20.combo_object_cst("Line 5 : ",4,0,4,4)
+cassettelabel_field20.combo_object_cst("Line 4 : ",3,0,3,5)
 cassettelabel_field20.box.configure(state='disabled')
+# Cassette organisation, Line 5
+cassettelabel_field16.combo_object_cst("Line 5 : ",4,0,4,1)
+cassettelabel_field16.box.configure(state='disabled')
+cassettelabel_field17.combo_object_cst("Line 5 : ",4,0,4,2)
+cassettelabel_field17.box.configure(state='disabled')
+cassettelabel_field18.combo_object_cst("Line 5 : ",4,0,4,3)
+cassettelabel_field18.box.configure(state='disabled')
+cassettelabel_field19.combo_object_cst("Line 5 : ",4,0,4,4)
+cassettelabel_field19.box.configure(state='disabled')
+cassettelabel_field20.combo_object_cst("Line 5 : ",4,0,4,5)
+cassettelabel_field20.box.configure(state='disabled')
+
 
 
 # Slide organisation, line 1
@@ -507,27 +530,31 @@ slidelabel_field1.combo_object_sdl("Line 1 : ",0,0,0,1)
 slidelabel_field2.combo_object_sdl("Line 1 : ",0,0,0,2)
 slidelabel_field3.combo_object_sdl("Line 1 : ",0,0,0,3)
 slidelabel_field4.combo_object_sdl("Line 1 : ",0,0,0,4)
+slidelabel_field5.combo_object_sdl("Line 1 : ",0,0,0,5)
 # Slide organisation, line 2
-slidelabel_field5.combo_object_sdl("Line 2 : ",1,0,1,1)
-slidelabel_field6.combo_object_sdl("Line 2 : ",1,0,1,2)
-slidelabel_field7.combo_object_sdl("Line 2 : ",1,0,1,3)
-slidelabel_field8.combo_object_sdl("Line 2 : ",1,0,1,4)
+slidelabel_field6.combo_object_sdl("Line 2 : ",1,0,1,1)
+slidelabel_field7.combo_object_sdl("Line 2 : ",1,0,1,2)
+slidelabel_field8.combo_object_sdl("Line 2 : ",1,0,1,3)
+slidelabel_field9.combo_object_sdl("Line 2 : ",1,0,1,4)
+slidelabel_field10.combo_object_sdl("Line 2 : ",1,0,1,5)
 # Slide organisation, line 3
-slidelabel_field9.combo_object_sdl("Line 3 : ",2,0,2,1)
-slidelabel_field10.combo_object_sdl("Line 3 : ",2,0,2,2)
-slidelabel_field11.combo_object_sdl("Line 3 : ",2,0,2,3)
-slidelabel_field12.combo_object_sdl("Line 3 : ",2,0,2,4)
+slidelabel_field11.combo_object_sdl("Line 3 : ",2,0,2,1)
+slidelabel_field12.combo_object_sdl("Line 3 : ",2,0,2,2)
+slidelabel_field13.combo_object_sdl("Line 3 : ",2,0,2,3)
+slidelabel_field14.combo_object_sdl("Line 3 : ",2,0,2,4)
+slidelabel_field15.combo_object_sdl("Line 3 : ",2,0,2,5)
 # Slide organisation, line 4
-slidelabel_field13.combo_object_sdl("Line 4 : ",3,0,3,1)
-slidelabel_field14.combo_object_sdl("Line 4 : ",3,0,3,2)
-slidelabel_field15.combo_object_sdl("Line 4 : ",3,0,3,3)
-slidelabel_field16.combo_object_sdl("Line 4 : ",3,0,3,4)
+slidelabel_field16.combo_object_sdl("Line 4 : ",3,0,3,1)
+slidelabel_field17.combo_object_sdl("Line 4 : ",3,0,3,2)
+slidelabel_field18.combo_object_sdl("Line 4 : ",3,0,3,3)
+slidelabel_field19.combo_object_sdl("Line 4 : ",3,0,3,4)
+slidelabel_field20.combo_object_sdl("Line 4 : ",3,0,3,5)
 # Slide organisation, line 5
-slidelabel_field17.combo_object_sdl("Line 5 : ",4,0,4,1)
-slidelabel_field18.combo_object_sdl("Line 5 : ",4,0,4,2)
-slidelabel_field19.combo_object_sdl("Line 5 : ",4,0,4,3)
-slidelabel_field20.combo_object_sdl("Line 5 : ",4,0,4,4)
-
+slidelabel_field21.combo_object_sdl("Line 5 : ",4,0,4,1)
+slidelabel_field22.combo_object_sdl("Line 5 : ",4,0,4,2)
+slidelabel_field23.combo_object_sdl("Line 5 : ",4,0,4,3)
+slidelabel_field24.combo_object_sdl("Line 5 : ",4,0,4,4)
+slidelabel_field25.combo_object_sdl("Line 5 : ",4,0,4,5)
 
 ################################################################################################
 ################################################################################################
@@ -555,11 +582,10 @@ btn_save_profile = tk.Button(subframe_3, text="Sauvegarder profil", bg='CadetBlu
  command=Special_Functions.save_profile).pack(side=tk.RIGHT, fill=tk.BOTH)
 
 btn_send_to_queue = tk.Button(subframe_5, text="Envoyer à la liste d'attente", bg='rosy brown', 
- command=Special_Functions.send_to_queue).grid(row=0, column=0)
+ command=Special_Functions.send_to_queue).grid(row=1, column=0)
 
 btn_send_command = tk.Button(subframe_6, text="Démarrer gravure", bg='indian red', 
- command=Special_Functions.send_command).pack(side=tk.TOP, fill=tk.BOTH, padx=2, pady=3)
-
+ command=Special_Functions.run_sc_thr).pack(side=tk.TOP, fill=tk.BOTH, padx=2, pady=3)
 
 btn_eject_slide = tk.Button(subframe_7, text="Eject. (GLM)", bg='SlateGray2', 
  command=Special_Functions.eject_command_slide).grid(row=0, column=0)
