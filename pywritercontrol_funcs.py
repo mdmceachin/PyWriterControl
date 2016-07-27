@@ -1049,7 +1049,7 @@ class Special_Functions():
 			# send_command() call
 			# Remove this placeholder if already present
 			
-			if clswl.waitinglist.get(0) == '###   ###   ###':
+			if clswl.waitinglist.get(0) == '':
 				clswl.waitinglist.delete(0)
 				self.parent.update_idletasks()
 			
@@ -1057,7 +1057,6 @@ class Special_Functions():
 				pass
 			
 			self.count = ''
-			clswl.waitinglist.insert(tk.END, '###   ###   ###')
 			
 			# Now, we will properly send the lines to the machine
 			# for this, we instanciate the ConnectPort function (the one who
@@ -1069,7 +1068,7 @@ class Special_Functions():
 				print("###")
 				print(counter)
 				print("###")
-				if clswl.waitinglist.get(0) == '###   ###   ###':
+				if clswl.waitinglist.get(0) == '':
 					clswl.waitinglist.delete(0)
 					self.break_current_command = 1
 					break
@@ -1129,7 +1128,7 @@ class Special_Functions():
 					
 					waitinglist_size = len(clswl.waitinglist.get(0,tk.END))
 					
-					if clswl.waitinglist.get(0) == '###   ###   ###':
+					if clswl.waitinglist.get(0) == '':
 						clswl.waitinglist.delete(0)
 						print("#########")
 						clswl.waitinglist.update_idletasks()
