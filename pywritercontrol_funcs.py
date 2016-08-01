@@ -19,6 +19,7 @@ from intf_widgets import (Interface_ComboBoxCST, Interface_ComboBoxSDL,
 from com_funcs import PortFunctions, ConnectPort
 from itf_wait_list import Interface_WaitingList
 from itf_wt_set import Interface_TimeSetWindow
+from itf_stylus_control import Interface_StylusControl
 
 ################################################################################################
 ################################################################################################
@@ -461,11 +462,15 @@ class Special_Functions():
 			count +=1
 			self.slidelabel_val_list_real[i] = (str(self.slidelabel_val_list_real[i]) + '#N')
 			self.label[i] = (str(self.label[i]) + '#N')	
-				
+		
+		for classname in [classname for classname in Interface_StylusControl]:
+			self.stylus_command = classname.stylus_command
+		
 		self.sdl_list_sep = "|"
 		self.sdl_list = self.sdl_list_sep.join(self.slidelabel_val_list_simple)
-		
-		self.slidelabel_val_list_real.insert(0, '[$#G01')
+		slide_insert_init_command = ('[$', str(self.stylus_command), '#G01')
+		slide_insert_init_command_2 = ''.join(slide_insert_init_command)
+		self.slidelabel_val_list_real.insert(0, slide_insert_init_command_2)
 		self.slidelabel_label = "".join(self.slidelabel_val_list_real)
 		self.slidelabel_label = self.slidelabel_label + '\x0d]'
 		

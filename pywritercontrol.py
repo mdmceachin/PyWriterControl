@@ -53,6 +53,7 @@ from intf_widgets import (Interface_ComboBox, Interface_ListBox, Interface_Entry
 from com_funcs import PortFunctions, ConnectPort
 from itf_wait_list import Interface_WaitingList
 from itf_wt_set import Interface_TimeSetWindow
+from itf_stylus_control import Interface_StylusControl
 from pywritercontrol_funcs import Special_Functions
 
 ################################################################################################
@@ -234,6 +235,7 @@ menu_listbox_animaltype = Interface_ListBox('menu_listbox_animaltype')
 menu_listbox_colorations = Interface_ListBox('menu_listbox_colorations')
 
 menu_time_set = Interface_TimeSetWindow('menu_time_set')
+menu_stylus_set = Interface_StylusControl('menu_stylus_set')
 
 # Menus
 menu_fichier = tk.Menu(barre_menu, tearoff = 0)
@@ -277,6 +279,7 @@ menu_edition.add_command(label="Entrées espèces", command = menu_listbox_anima
 menu_div = tk.Menu(barre_menu, tearoff = 0)
 barre_menu.add_cascade(label="Divers", menu = menu_div)
 menu_div.add_command(label="Réglages des temps de gravure", command = menu_time_set.timewindow)
+menu_div.add_command(label="Réglages de la position du stylet", command = menu_stylus_set.styluswindow)
 menu_div.add_command(label="Interface : bleue", command = set_color_blue)
 menu_div.add_command(label="Interface : rose", command = set_color_pink)
 menu_div.add_command(label="Interface : vert", command = set_color_green)
