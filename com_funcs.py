@@ -8,6 +8,7 @@
 import serial
 from intf_widgets import Interface_ComboBox
 import time
+
 ################################################################################################
 ################################################################################################
 ################################################################################################
@@ -35,13 +36,12 @@ class PortFunctions():
 			try:
 				CONNECTEDPORT.open_port(self.port)
 				CONNECTEDPORT.close_port(self.port)
-				#print("Port OK !")
+
 				self.port_state = 1
 				break
 				
 			except serial.SerialException as e2: # wrong port = exception error code 2
-				#print("Port not working !")
-				#print(self.port)
+
 				self.port_state = 0
 				break
 				
@@ -114,6 +114,10 @@ class PortFunctions():
 class ConnectPort():
 	def __init__(self):
 		# default parameters, as defined by Carousel Microwriter official documentation """
+		# Also, at NAMSA the machines are weirdly set so better double check the buttons
+		# behind them to see if the following parameters are corresponding
+		# (especially for the XON/XOFF setting)
+		
 		self.port = serial.Serial()
 		self.port.port = ''
 		self.port.baudrate = 9600
@@ -127,7 +131,7 @@ class ConnectPort():
 		self.port.write_timeout = 1
 		self.port.rts = True
 		self.port.dtr = True
-		self.port.port = 'COM1' # default
+		self.port.port = 'COM1'
 		self.writer_status = []
 		self.count = 0
 						
@@ -137,7 +141,6 @@ class ConnectPort():
 		self.port.open()
 		self.port.flushInput()
 		self.port.flushOutput()
-		#print("Port " + "[" + self.port.port + "]" + " open.")
 	
 	def close_port(self, port):
 		self.port.port = port
@@ -145,29 +148,15 @@ class ConnectPort():
 			self.port.flushInput()
 			self.port.flushOutput()
 			self.port.close()
-			#print("Port "  + "[" +  self.port.port + "]" + " closed.")
 		else:
 			pass
-			#print("Port "  + "[" +  self.port.port + "]" + " already closed, nothing to do.")
 			
 	def send_writer(self, port, COMMANDLINE):	 
 		try:
 			self.open_port(port)
 			self.port.write(COMMANDLINE.encode('ascii'))
-			#print('Command OK.')
 			self.close_port(port)
 		except serial.SerialException as e2: # wrong port = exception error code 2
 			pass
-			#print("Port not working !")
-			#print(port)
+
 		
-	def rec_writer_status(self, port):
-		self.open_port(port)
-		line_writer_status=self.port.readline()
-		while line_writer_status != b'':
-			if line_writer_status != b'':
-				self.writer_status.append(line_output)
-			else:
-				pass
-		self.close_port(port)
-		return self.writer_status		

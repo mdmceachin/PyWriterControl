@@ -16,6 +16,11 @@ import re
 ################################################################################################
 ################################################################################################
 
+# This class allows to adjust the stylus position of the slidewriter
+# Implementation is really close to what I've done in itf_wait_list
+# Except that this time the values are sent within the char line sent to
+# the machine
+
 class Iterable_StylusControl(type):
 	@classmethod
 	def __prepare__(self, name, bases):

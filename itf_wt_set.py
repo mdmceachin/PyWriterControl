@@ -15,6 +15,8 @@ import collections
 ################################################################################################
 ################################################################################################
 
+# This class allow to set the time values between sending each command
+# It is just a popup window with some entryboxes and a value check really
 
 class Iterable_TimeSetWindow(type):
 	@classmethod

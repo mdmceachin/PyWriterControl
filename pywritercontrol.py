@@ -16,7 +16,7 @@
 # and the current application (Shandon Microwriter) is
 # not working properly.
 
-# This software use Python, PySerial and other things (tk, ttk, collections, time, datetime, os, weakref)
+# This software use Python, PySerial and other things (tk, ttk, collections, time, datetime, os, re, weakref)
 # that are probably included in any basic python installation (except for pyserial).
 # If it's not, please be sure that everything is set up before launching
 # the software.
@@ -123,6 +123,7 @@ subframe_7 = tk.LabelFrame(frame_right, text="Commandes", padx=5, pady=5)
 bg_default = main_window.cget("bg")
 
 def set_color_blue():
+	# Cédric
 	main_window.configure(background='SkyBlue2')
 	barre_menu.configure(background='SkyBlue2')
 	frame_left.configure(background='SkyBlue2')
@@ -137,6 +138,7 @@ def set_color_blue():
 	subframe_7.configure(background='SkyBlue2')
 	
 def set_color_pink():
+	# Jennifer
 	main_window.configure(background='LightPink1')
 	barre_menu.configure(background='LightPink1')
 	frame_left.configure(background='LightPink1')
@@ -151,6 +153,7 @@ def set_color_pink():
 	subframe_7.configure(background='LightPink1')
 	
 def set_color_green():
+	# Vincent
 	main_window.configure(background='DarkOliveGreen1')
 	barre_menu.configure(background='DarkOliveGreen1')
 	frame_left.configure(background='DarkOliveGreen1')
@@ -165,6 +168,7 @@ def set_color_green():
 	subframe_7.configure(background='DarkOliveGreen1')
 	
 def set_color_orange():
+	# Béatrice
 	main_window.configure(background='sienna1')
 	barre_menu.configure(background='sienna1')
 	frame_left.configure(background='sienna1')
@@ -179,6 +183,7 @@ def set_color_orange():
 	subframe_7.configure(background='sienna1')
 
 def set_color_yellow():
+	# Just because you always need yellow widgets
 	main_window.configure(background='LightGoldenrod1')
 	barre_menu.configure(background='LightGoldenrod1')
 	frame_left.configure(background='LightGoldenrod1')
@@ -193,6 +198,7 @@ def set_color_yellow():
 	subframe_7.configure(background='LightGoldenrod1')
 
 def set_color_none():
+	# Default UI color
 	main_window.configure(background=bg_default)
 	barre_menu.configure(background=bg_default)
 	frame_left.configure(background=bg_default)
@@ -210,6 +216,7 @@ def set_color_none():
 ################################################################################################
 ##################################### FUNCTIONS INSTANCIATION ##################################
 ################################################################################################
+
 Special_Functions = Special_Functions(main_window)
 waitinglist = Interface_WaitingList(subframe_6, 'waitinglist')
 radiobuttons_blade_slide = Interface_RadioBox(subframe_1, 'radiobuttons_blade_slide')

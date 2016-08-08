@@ -28,9 +28,16 @@ from itf_stylus_control import Interface_StylusControl
 class Special_Functions():
 	def __init__(self, parent):
 		# Oh god too much unused variables, I have to pylint this seriously!
-		# By default, use ridiculous time values
+		
+		# By default, use ridicusly high time values
+		# Problem is, it is close to impossible to anticipate the required writing time
+		# And if the time set is too low and a command is sent while another is being processed
+		# by the machine, well, the machine ignore it
+		# This is especially sad when writing a set of blade using an incrementation somewhere in the label
+		# As it will let some holes in the numerotation...
+		
 		self.slide_sleep_time = 30 # slides : ideally 12-25 sec, depending on the label size ;
-		self.cassette_sleep_time = 20 # cassette : around 8-10 sec, depending on the label size
+		self.cassette_sleep_time = 20 # cassette : around 8-20 sec, depending on the label size
 		self.count = ''
 		self.parent = parent
 		self.cassette_val_list_simple = []
