@@ -158,5 +158,15 @@ class ConnectPort():
 			self.close_port(port)
 		except serial.SerialException as e2: # wrong port = exception error code 2
 			pass
+			
+	def receive_writer(self):
+		try:
+			#self.open_port(port)
+			self.port.read(1)
+			#self.close_port(port)
+		except serial.SerialException as e2: # wrong port = exception error code 2
+			pass
+		return self.port.read(1) 			
+			
 
 		

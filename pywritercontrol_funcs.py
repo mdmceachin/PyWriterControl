@@ -1128,9 +1128,7 @@ class Special_Functions():
 						self.last_inc_char = self.last_inc_char.group()
 						self.last_inc_char = re.sub(r'#I', '', self.last_inc_char)
 						self.last_inc_char = re.sub(r'#[1-4]', '', self.last_inc_char)
-						print("### ### ###")
-						print(self.last_inc_char)
-						print("### ### ###")
+
 						repl_params_2 = r'#[1-4][0-9][0-9]#I'
 						self.last_inc_char_2 = re.search(repl_params_2, clswl.real_send_list[0])
 						if self.last_inc_char_2 != None :
@@ -1138,9 +1136,7 @@ class Special_Functions():
 							self.last_inc_char_2 = re.sub(r'#I', '', self.last_inc_char_2)
 							self.last_inc_char_2 = re.sub(r'#[1-4]', '', self.last_inc_char_2)
 							repl_params_3 = r'[0-9][0-9]#I'
-							print("### ###")
-							print(self.last_inc_char_2)
-							print("### ###")
+
 						else:
 							self.last_inc_char_2 = self.last_inc_char
 							repl_params_2 = repl_params
@@ -1163,7 +1159,32 @@ class Special_Functions():
 							print(x+1)
 							print(clswl.cassette_label_container2[x])
 							send_command.send_writer(self.cassettewriter_port, clswl.cassette_label_container2[x])
-							time.sleep(self.cassette_sleep_time)
+							send_command.open_port(self.cassettewriter_port)
+							received_writer = b''
+							count = 0
+							while received_writer == b'':
+								if count == 25:
+									print("ERR : timeout")
+									warning_pop_up = tk.Toplevel()
+									warning_message = ("Erreur : commande refusée [timeout] !")
+									popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+									popup.pack()
+									btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+									btn_OK.pack()
+									break
+									
+								received_writer = send_command.receive_writer()
+								if received_writer != b'':
+									print("OK")
+									send_command.close_port(self.cassettewriter_port)
+									break
+								else:
+									count +=1	
+							
+							if x == int(self.send_nb):
+								pass
+							else:	
+								time.sleep(self.cassette_sleep_time)
 					
 					elif "Lame(s)" in clswl.waitinglist.get(0):
 						clswl.slide_label_container2 = []
@@ -1177,7 +1198,32 @@ class Special_Functions():
 							print(y+1)
 							print(clswl.slide_label_container2[y])
 							send_command.send_writer(self.slidewriter_port, clswl.slide_label_container2[y])
-							time.sleep(self.slide_sleep_time)
+							send_command.open_port(self.slidewriter_port)
+							received_writer = b''
+							count = 0
+							while received_writer == b'':
+								if count == 25:
+									print("ERR : timeout")
+									warning_pop_up = tk.Toplevel()
+									warning_message = ("Erreur : commande refusée [timeout] !")
+									popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+									popup.pack()
+									btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+									btn_OK.pack()
+									break
+								
+								received_writer = send_command.receive_writer()
+								if received_writer != b'':
+									print("OK")
+									send_command.close_port(self.slidewriter_port)
+									break
+								else:
+									count +=1
+										
+							if y == int(self.send_nb):
+								pass
+							else:	
+								time.sleep(self.slide_sleep_time)
 						
 						
 					else:
