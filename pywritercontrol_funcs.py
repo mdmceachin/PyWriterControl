@@ -1140,7 +1140,9 @@ class Special_Functions():
 							repl_params_3 = repl_params	
 					else:
 						self.last_inc_char = 0
-						self.last_inc_char_2 = 0
+						self.last_inc_char_2 = self.last_inc_char
+						repl_params_2 = repl_params
+						repl_params_3 = repl_params	
 							
 					if "Cassette(s)" in clswl.waitinglist.get(0):
 						clswl.cassette_label_container2 = []

@@ -605,11 +605,8 @@ command=Special_Functions.reset_slidewriter_command).grid(row=0, column=3)
 btn_stop_after_cassette = tk.Button(subframe_7, text="Stop (GCS)", bg='bisque3', 
  command=Special_Functions.stop_after_cassette_command).grid(row=0, column=4)
 
-btn_stop_after_slide = tk.Button(subframe_7, text="Stop (GLM)", bg='bisque4', 
+btn_stop_after_slide = tk.Button(subframe_7, text="Stop/Charg. (GLM)", bg='bisque4', 
  command=Special_Functions.stop_after_slide_command).grid(row=0, column=5)
-
-btn_load_slide = tk.Button(subframe_7, text="Charg. (GLM)", bg='AntiqueWhite3', 
- command=Special_Functions.load_slide_command).grid(row=0, column=6)
 
 ################################################################################################
 ################################################################################################

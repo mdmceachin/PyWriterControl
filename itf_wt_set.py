@@ -43,8 +43,8 @@ class Interface_TimeSetWindow(metaclass = Iterable_TimeSetWindow):
 		self.real_send_list = []
 		self.object_number_list = []
 		self.cassette_label_container = []
-		self.time_cst = 8
-		self.time_sld = 15
+		self.time_cst = 20
+		self.time_sld = 30
 		
 	def timewindow(self):
 		self.timewindow_subframe=tk.Toplevel()

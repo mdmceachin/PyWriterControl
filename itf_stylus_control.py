@@ -10,6 +10,7 @@ import weakref
 import collections
 from com_funcs import PortFunctions, ConnectPort
 from intf_widgets import Interface_ComboBox
+import re
 
 ################################################################################################
 ################################################################################################
@@ -120,6 +121,36 @@ class Interface_StylusControl(metaclass = Iterable_StylusControl):
 		self.stylus_right = self.stylus_right_entry.get()
 		self.stylus_up = self.stylus_up_entry.get()
 		self.stylus_down = self.stylus_down_entry.get()
+		
+		search_cmd = r'[0-9][0-9]'
+		
+		self.stylus_left_search =  re.search(search_cmd, self.stylus_left)
+		if self.stylus_left_search == None :
+			self.stylus_left_cmd = (str(0),str(self.stylus_left))
+			self.stylus_left = ''.join(self.stylus_left_cmd)
+		else:
+			pass
+		
+		self.stylus_right_search =  re.search(search_cmd, self.stylus_right)
+		if self.stylus_right_search == None :
+			self.stylus_right_cmd = (str(0),str(self.stylus_right))
+			self.stylus_right = ''.join(self.stylus_right_cmd)
+		else:
+			pass		
+			
+		self.stylus_up_search =  re.search(search_cmd, self.stylus_up)
+		if self.stylus_up_search == None :
+			self.stylus_up_cmd = (str(0),str(self.stylus_up))
+			self.stylus_up = ''.join(self.stylus_up_cmd)
+		else:
+			pass
+			
+		self.stylus_down_search =  re.search(search_cmd, self.stylus_down)
+		if self.stylus_down_search == None :
+			self.stylus_down_cmd = (str(0),str(self.stylus_down))
+			self.stylus_down = ''.join(self.stylus_down_cmd)
+		else:
+			pass		
 		
 		# Ugly. I know. But I am braindead atm.
 		if ((str(self.stylus_left).isnumeric()) and (str(self.stylus_right).isnumeric()) and (str(self.stylus_up).isnumeric()) and (str(self.stylus_down).isnumeric()) and (int(self.stylus_left) < 100) and (int(self.stylus_right) < 100) and (int(self.stylus_up) < 100) and (int(self.stylus_down) < 100)) :
