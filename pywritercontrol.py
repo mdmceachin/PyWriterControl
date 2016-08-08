@@ -600,20 +600,20 @@ btn_send_command = tk.Button(subframe_6, text="Démarrer gravure", bg='indian re
 btn_eject_slide = tk.Button(subframe_7, text="Eject. (GLM)", bg='SlateGray2', 
  command=Special_Functions.eject_command_slide).grid(row=0, column=0)
 
-btn_eject_cassette = tk.Button(subframe_7, text="Eject. (GCS)", bg='SlateGray3', 
- command=Special_Functions.eject_command_cassette).grid(row=0, column=1)
+#btn_eject_cassette = tk.Button(subframe_7, text="Eject. (GCS)", bg='SlateGray3', 
+# command=Special_Functions.eject_command_cassette).grid(row=0, column=1)
 
 btn_reset_cassettewriter = tk.Button(subframe_7, text="Reset (GCS)", bg='ivory2', 
-command=Special_Functions.reset_cassettewriter_command).grid(row=0, column=2)
+command=Special_Functions.reset_cassettewriter_command).grid(row=0, column=1)
 
 btn_reset_slidewriter = tk.Button(subframe_7, text="Reset (GLM)", bg='ivory3', 
-command=Special_Functions.reset_slidewriter_command).grid(row=0, column=3)
+command=Special_Functions.reset_slidewriter_command).grid(row=0, column=2)
 
 btn_stop_after_cassette = tk.Button(subframe_7, text="Stop (GCS)", bg='bisque3', 
- command=Special_Functions.stop_after_cassette_command).grid(row=0, column=4)
+ command=Special_Functions.stop_after_cassette_command).grid(row=0, column=3)
 
 btn_stop_after_slide = tk.Button(subframe_7, text="Stop/Charg. (GLM)", bg='bisque4', 
- command=Special_Functions.stop_after_slide_command).grid(row=0, column=5)
+ command=Special_Functions.stop_after_slide_command).grid(row=0, column=4)
 
 ################################################################################################
 ################################################################################################

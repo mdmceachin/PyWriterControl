@@ -37,7 +37,7 @@ class Special_Functions():
 		# As it will let some holes in the numerotation...
 		
 		self.slide_sleep_time = 30 # slides : ideally 12-25 sec, depending on the label size ;
-		self.cassette_sleep_time = 20 # cassette : around 8-20 sec, depending on the label size
+		self.cassette_sleep_time = 12 # cassette : around 8-20 sec, depending on the label size
 		self.count = ''
 		self.parent = parent
 		self.cassette_val_list_simple = []
@@ -1158,19 +1158,14 @@ class Special_Functions():
 						for x in range(0, int(self.send_nb)):
 							print(x+1)
 							print(clswl.cassette_label_container2[x])
-							send_command.send_writer(self.cassettewriter_port, clswl.cassette_label_container2[x])
 							send_command.open_port(self.cassettewriter_port)
+							send_command.send_writer(self.cassettewriter_port, clswl.cassette_label_container2[x])
 							received_writer = b''
 							count = 0
 							while received_writer == b'':
 								if count == 25:
 									print("ERR : timeout")
-									warning_pop_up = tk.Toplevel()
-									warning_message = ("Erreur : commande refusée [timeout] !")
-									popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
-									popup.pack()
-									btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
-									btn_OK.pack()
+									send_command.close_port(self.cassettewriter_port)
 									break
 									
 								received_writer = send_command.receive_writer()
@@ -1182,8 +1177,10 @@ class Special_Functions():
 									count +=1	
 							
 							if x == int(self.send_nb):
+								send_command.close_port(self.cassettewriter_port)
 								pass
 							else:	
+								send_command.close_port(self.cassettewriter_port)
 								time.sleep(self.cassette_sleep_time)
 					
 					elif "Lame(s)" in clswl.waitinglist.get(0):
@@ -1197,19 +1194,14 @@ class Special_Functions():
 						for y in range(0,int(self.send_nb)):
 							print(y+1)
 							print(clswl.slide_label_container2[y])
-							send_command.send_writer(self.slidewriter_port, clswl.slide_label_container2[y])
 							send_command.open_port(self.slidewriter_port)
+							send_command.send_writer(self.slidewriter_port, clswl.slide_label_container2[y])
 							received_writer = b''
 							count = 0
 							while received_writer == b'':
 								if count == 25:
 									print("ERR : timeout")
-									warning_pop_up = tk.Toplevel()
-									warning_message = ("Erreur : commande refusée [timeout] !")
-									popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
-									popup.pack()
-									btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
-									btn_OK.pack()
+									send_command.close_port(self.slidewriter_port)
 									break
 								
 								received_writer = send_command.receive_writer()
@@ -1221,8 +1213,10 @@ class Special_Functions():
 									count +=1
 										
 							if y == int(self.send_nb):
+								send_command.close_port(self.slidewriter_port)
 								pass
-							else:	
+							else:
+								send_command.close_port(self.slidewriter_port)	
 								time.sleep(self.slide_sleep_time)
 						
 						
@@ -1268,7 +1262,7 @@ class Special_Functions():
 			self.cassettewriter_port = classname.box.get()
 		eject_command = PortFunctions()
 		eject_command.port_set(self.cassettewriter_port)
-		eject_command.button_eject_command()
+		eject_command.button_eject_command_cassette()
 	
 	def load_slide_command(self):
 		for classname in [classname for classname in Interface_ComboBox 
