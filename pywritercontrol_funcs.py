@@ -28,8 +28,9 @@ from itf_stylus_control import Interface_StylusControl
 class Special_Functions():
 	def __init__(self, parent):
 		# Oh god too much unused variables, I have to pylint this seriously!
-		self.slide_sleep_time = 15 # slides : ideally 12-25 sec, depending on the label size
-		self.cassette_sleep_time = 8 # cassette : around 8-10 sec, depending on the label size
+		# By default, use ridiculous time values
+		self.slide_sleep_time = 30 # slides : ideally 12-25 sec, depending on the label size ;
+		self.cassette_sleep_time = 20 # cassette : around 8-10 sec, depending on the label size
 		self.count = ''
 		self.parent = parent
 		self.cassette_val_list_simple = []
@@ -69,7 +70,6 @@ class Special_Functions():
 		self.list_combobox_content = []
 		self.list_comboboxcst_content = []
 		self.list_comboboxsdl_content = []
-		self.label = []
 		self.label_cst = []
 		self.last_inc_char = ''
 		self.checked_box_val = 0
@@ -452,16 +452,13 @@ class Special_Functions():
 				self.slidelabel_val_list_simple.append('  ')
 			else:
 				self.slidelabel_val_list_real.append(' ')
-				self.label.append(' ')
+				self.slidelabel_val_list_simple.append(' ')
 		
 		# 5 lines max for the slides. Theorically it can goes up to 7,
 		# But realistically people at NAMSA Lyon never use more than 5 lines
 		# So no need to complexify things for the sake of it
-		count = 0
 		for i in [4,9,14,19]:
-			count +=1
 			self.slidelabel_val_list_real[i] = (str(self.slidelabel_val_list_real[i]) + '#N')
-			self.label[i] = (str(self.label[i]) + '#N')	
 		
 		for classname in [classname for classname in Interface_StylusControl]:
 			self.stylus_command = classname.stylus_command
@@ -622,6 +619,7 @@ class Special_Functions():
 			self.cassette_line_number = self.count_cassette_line_number()
 			for classname in Interface_ComboBoxCST:
 				classname.valuesource, classname.valuesource_edit = classname.get_fields()	
+				
 				if '#1' in self.cassette_label:
 					if self.cassette_line_number > 2:
 						warning_pop_up = tk.Toplevel()
@@ -632,6 +630,7 @@ class Special_Functions():
 						btn_OK.pack()
 						return 0
 						break
+					
 									
 					else:
 						pass	
@@ -863,158 +862,188 @@ class Special_Functions():
 			pass
 			
 		else:
-		
 			cls1 = self.get_cls_radio()
 			cls2 = self.get_cls_list()
 			cls3 = self.get_cls_hes_trichrome_checkbutton()
 			
 			if cls1.get_radio_val() == 1:
-				for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
-					cls2.object_number_list.append(classname.box.get())
-				self.cassette_label, self.cassette_display_string, self.cassette_control, self.cst_nb = self.get_cassette_organisation()
-				self.queued_cst_nb  = self.cst_nb
-				if self.cassette_control == 1:
-					if cls3.value_of_checkbox == 1:
-						cls2.waitinglist.insert(tk.END, self.cassette_display_string)
-						cls2.real_send_list.append(self.cassette_label)
-						if 'HES' in self.cassette_display_string:
-							self.cassette_display_string =  self.cassette_display_string.replace("HES","TM")
-							cls2.waitinglist.insert(tk.END, self.cassette_display_string)
-							self.cassette_label = self.cassette_label.replace("HES","TM")
-							cls2.real_send_list.append(self.cassette_label)
-							
-							for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
-								cls2.object_number_list.append(classname.box.get())
-								
-						elif 'TM' in self.cassette_display_string:
-							self.cassette_display_string = self.cassette_display_string.replace("TM","HES")
-							cls2.waitinglist.insert(tk.END, self.cassette_display_string)
-							self.cassette_label = self.cassette_label.replace("TM","HES")
-							cls2.real_send_list.append(self.cassette_label)
-							
-							for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
-								cls2.object_number_list.append(classname.box.get()
-								)
-						else:
-							pass
-					
-					else:
-						cls2.waitinglist.insert(tk.END, self.cassette_display_string)
-						cls2.real_send_list.append(self.cassette_label)
+				font_size_control_cst = self.test_font_size_line_cst()
+				if font_size_control_cst != 0:
+					warning_pop_up = tk.Toplevel()
+					warning_message = ("Erreur : Une seule taille de police par ligne !")
+					popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+					popup.pack()
+					btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+					btn_OK.pack()
+				
 				else:
-					pass 
+					for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
+						cls2.object_number_list.append(classname.box.get())
+					self.cassette_label, self.cassette_display_string, self.cassette_control, self.cst_nb = self.get_cassette_organisation()
+					self.queued_cst_nb  = self.cst_nb
+					if self.cassette_control == 1:
+						if cls3.value_of_checkbox == 1:
+							cls2.waitinglist.insert(tk.END, self.cassette_display_string)
+							cls2.real_send_list.append(self.cassette_label)
+							if 'HES' in self.cassette_display_string:
+								self.cassette_display_string =  self.cassette_display_string.replace("HES","TM")
+								cls2.waitinglist.insert(tk.END, self.cassette_display_string)
+								self.cassette_label = self.cassette_label.replace("HES","TM")
+								cls2.real_send_list.append(self.cassette_label)
+								
+								for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
+									cls2.object_number_list.append(classname.box.get())
+									
+							elif 'TM' in self.cassette_display_string:
+								self.cassette_display_string = self.cassette_display_string.replace("TM","HES")
+								cls2.waitinglist.insert(tk.END, self.cassette_display_string)
+								self.cassette_label = self.cassette_label.replace("TM","HES")
+								cls2.real_send_list.append(self.cassette_label)
+								
+								for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
+									cls2.object_number_list.append(classname.box.get()
+									)
+							else:
+								pass
+						
+						else:
+							cls2.waitinglist.insert(tk.END, self.cassette_display_string)
+							cls2.real_send_list.append(self.cassette_label)
+					else:
+						pass 
 			
 			elif cls1.get_radio_val() == 2:
-				for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
-					cls2.object_number_list.append(classname.box.get())
-				self.slidelabel_label, self.slide_display_string, self.slide_control, self.slide_nb = self.get_slide_organisation()
-				self.queued_slide_nb = self.slide_nb
-				if self.slide_control == 1:
-					if cls3.value_of_checkbox == 1:
-						cls2.waitinglist.insert(tk.END, self.slide_display_string)
-						cls2.real_send_list.append(self.slidelabel_label)
-						if 'HES' in self.slide_display_string:
-							self.slide_display_string = self.slide_display_string.replace("HES","TM")
-							cls2.waitinglist.insert(tk.END, self.slide_display_string)
-							self.slidelabel_label = self.slidelabel_label.replace("HES","TM")
-							cls2.real_send_list.append(self.slidelabel_label)
-							
-							for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
-								cls2.object_number_list.append(classname.box.get())
-								
-						elif 'TM' in self.slide_display_string:
-							self.slide_display_string = self.slide_display_string.replace("TM","HES")
-							cls2.waitinglist.insert(tk.END, self.slide_display_string)
-							self.slidelabel_label = self.slidelabel_label.replace("TM","HES")
-							cls2.real_send_list.append(self.slidelabel_label)
-							
-							for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
-								cls2.object_number_list.append(classname.box.get())
-								
-						else:
-							pass				
-					else:
-						cls2.waitinglist.insert(tk.END, self.slide_display_string)
-						cls2.real_send_list.append(self.slidelabel_label)
-				else:
-					pass
-			
-			elif cls1.get_radio_val() == 3:	
-				self.cassette_label, self.cassette_display_string, self.cassette_control, self.cst_nb = self.get_cassette_organisation()
-				self.queued_cst_nb  = self.cst_nb
-				if self.cassette_control == 1:
-					for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
-						cls2.object_number_list.append(classname.box.get())
-					if cls3.value_of_checkbox == 1:
-						cls2.waitinglist.insert(tk.END, self.cassette_display_string)
-						cls2.real_send_list.append(self.cassette_label)
-						if 'HES' in self.cassette_display_string:
-							self.cassette_display_string = self.cassette_display_string.replace("HES","TM")
-							cls2.waitinglist.insert(tk.END, self.cassette_display_string)
-							self.cassette_label = self.cassette_label.replace("HES","TM")
-							cls2.real_send_list.append(self.cassette_label)
-							
-							for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
-								cls2.object_number_list.append(classname.box.get())
-								
-						elif 'TM' in self.cassette_display_string:
-							self.cassette_display_string = self.cassette_display_string.replace("TM","HES")
-							cls2.waitinglist.insert(tk.END, self.cassette_display_string)
-							self.cassette_label = self.cassette_label.replace("TM","HES")
-							cls2.real_send_list.append(self.cassette_label)
-							
-							for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
-								cls2.object_number_list.append(classname.box.get())
-								
-						else:
-							pass
-							
-					else:	
-						cls2.waitinglist.insert(tk.END, self.cassette_display_string)
-						cls2.real_send_list.append(self.cassette_label)
-					
-				else:
-					pass
+				font_size_control_sld = self.test_font_size_line_sld()
+				if font_size_control_sld != 0:
+					warning_pop_up = tk.Toplevel()
+					warning_message = ("Erreur : Une seule taille de police par ligne !")
+					popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+					popup.pack()
+					btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+					btn_OK.pack()
 				
-				self.slidelabel_label, self.slide_display_string, self.slide_control, self.slide_nb = self.get_slide_organisation()	
-				self.queued_slide_nb = self.slide_nb
-				if self.slide_control == 1:
+				else:
 					for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
 						cls2.object_number_list.append(classname.box.get())
-					if cls3.value_of_checkbox == 1:
-						cls2.waitinglist.insert(tk.END, self.slide_display_string)
-						cls2.real_send_list.append(self.slidelabel_label)
-						
-						if 'HES' in self.slide_display_string:
-							self.slide_display_string = self.slide_display_string.replace("HES","TM")
+					self.slidelabel_label, self.slide_display_string, self.slide_control, self.slide_nb = self.get_slide_organisation()
+					self.queued_slide_nb = self.slide_nb
+					if self.slide_control == 1:
+						if cls3.value_of_checkbox == 1:
 							cls2.waitinglist.insert(tk.END, self.slide_display_string)
-							self.slidelabel_label = self.slidelabel_label.replace("HES","TM")
 							cls2.real_send_list.append(self.slidelabel_label)
-							
-							for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
-								cls2.object_number_list.append(classname.box.get())
+							if 'HES' in self.slide_display_string:
+								self.slide_display_string = self.slide_display_string.replace("HES","TM")
+								cls2.waitinglist.insert(tk.END, self.slide_display_string)
+								self.slidelabel_label = self.slidelabel_label.replace("HES","TM")
+								cls2.real_send_list.append(self.slidelabel_label)
 								
-						elif 'TM' in self.slide_display_string:
-							self.slide_display_string = self.slide_display_string.replace("TM","HES")
+								for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
+									cls2.object_number_list.append(classname.box.get())
+									
+							elif 'TM' in self.slide_display_string:
+								self.slide_display_string = self.slide_display_string.replace("TM","HES")
+								cls2.waitinglist.insert(tk.END, self.slide_display_string)
+								self.slidelabel_label = self.slidelabel_label.replace("TM","HES")
+								cls2.real_send_list.append(self.slidelabel_label)
+								
+								for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
+									cls2.object_number_list.append(classname.box.get())
+									
+							else:
+								pass				
+						else:
 							cls2.waitinglist.insert(tk.END, self.slide_display_string)
-							self.slidelabel_label = self.slidelabel_label.replace("TM","HES")
+							cls2.real_send_list.append(self.slidelabel_label)
+					else:
+						pass
+			
+			elif cls1.get_radio_val() == 3:
+				font_size_control_cst = self.test_font_size_line_cst()
+				font_size_control_sld = self.test_font_size_line_sld()
+				if (font_size_control_cst or font_size_control_sld) != 0:
+						warning_pop_up = tk.Toplevel()
+						warning_message = ("Erreur : Une seule taille de police par ligne !")
+						popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+						popup.pack()
+						btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+						btn_OK.pack()
+					
+				else:	
+					self.cassette_label, self.cassette_display_string, self.cassette_control, self.cst_nb = self.get_cassette_organisation()
+					self.queued_cst_nb  = self.cst_nb
+					if self.cassette_control == 1:
+						for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
+							cls2.object_number_list.append(classname.box.get())
+						if cls3.value_of_checkbox == 1:
+							cls2.waitinglist.insert(tk.END, self.cassette_display_string)
+							cls2.real_send_list.append(self.cassette_label)
+							if 'HES' in self.cassette_display_string:
+								self.cassette_display_string = self.cassette_display_string.replace("HES","TM")
+								cls2.waitinglist.insert(tk.END, self.cassette_display_string)
+								self.cassette_label = self.cassette_label.replace("HES","TM")
+								cls2.real_send_list.append(self.cassette_label)
+								
+								for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
+									cls2.object_number_list.append(classname.box.get())
+									
+							elif 'TM' in self.cassette_display_string:
+								self.cassette_display_string = self.cassette_display_string.replace("TM","HES")
+								cls2.waitinglist.insert(tk.END, self.cassette_display_string)
+								self.cassette_label = self.cassette_label.replace("TM","HES")
+								cls2.real_send_list.append(self.cassette_label)
+								
+								for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
+									cls2.object_number_list.append(classname.box.get())
+									
+							else:
+								pass
+								
+						else:	
+							cls2.waitinglist.insert(tk.END, self.cassette_display_string)
+							cls2.real_send_list.append(self.cassette_label)
+						
+					else:
+						pass
+					
+					self.slidelabel_label, self.slide_display_string, self.slide_control, self.slide_nb = self.get_slide_organisation()	
+					self.queued_slide_nb = self.slide_nb
+					if self.slide_control == 1:
+						for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
+							cls2.object_number_list.append(classname.box.get())
+						if cls3.value_of_checkbox == 1:
+							cls2.waitinglist.insert(tk.END, self.slide_display_string)
 							cls2.real_send_list.append(self.slidelabel_label)
 							
-							for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
-								cls2.object_number_list.append(classname.box.get())
+							if 'HES' in self.slide_display_string:
+								self.slide_display_string = self.slide_display_string.replace("HES","TM")
+								cls2.waitinglist.insert(tk.END, self.slide_display_string)
+								self.slidelabel_label = self.slidelabel_label.replace("HES","TM")
+								cls2.real_send_list.append(self.slidelabel_label)
+								
+								for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
+									cls2.object_number_list.append(classname.box.get())
+									
+							elif 'TM' in self.slide_display_string:
+								self.slide_display_string = self.slide_display_string.replace("TM","HES")
+								cls2.waitinglist.insert(tk.END, self.slide_display_string)
+								self.slidelabel_label = self.slidelabel_label.replace("TM","HES")
+								cls2.real_send_list.append(self.slidelabel_label)
+								
+								for classname in [classname for classname in Interface_ComboBox if 'object_number' in classname.name]:
+									cls2.object_number_list.append(classname.box.get())
+									
+							else:
+								pass
 								
 						else:
-							pass
-							
+							cls2.waitinglist.insert(tk.END, self.slide_display_string)
+							cls2.real_send_list.append(self.slidelabel_label)
 					else:
-						cls2.waitinglist.insert(tk.END, self.slide_display_string)
-						cls2.real_send_list.append(self.slidelabel_label)
-				else:
-					pass
-			
+						pass
+				
 			else:
 				pass
-				
+					
 			cls2.waitinglist.update_idletasks()
 			
 	def send_command(self):
@@ -1079,6 +1108,7 @@ class Special_Functions():
 					break
 				
 				else:
+					
 					self.count = len(clswl.waitinglist.get(0,tk.END)) - 1			
 					search_params = r'(?<=\[).+?(?=\])'
 					repl_params = r'[0-9]#I'
@@ -1090,16 +1120,34 @@ class Special_Functions():
 					if self.last_inc_char != None :
 						self.last_inc_char = self.last_inc_char.group()
 						self.last_inc_char = re.sub(r'#I', '', self.last_inc_char)
-			
+						self.last_inc_char = re.sub(r'#[1-4]', '', self.last_inc_char)
+						print("### ### ###")
+						print(self.last_inc_char)
+						print("### ### ###")
+						repl_params_2 = r'#[1-4][0-9][0-9]#I'
+						self.last_inc_char_2 = re.search(repl_params_2, clswl.real_send_list[0])
+						if self.last_inc_char_2 != None :
+							self.last_inc_char_2 = self.last_inc_char_2.group()
+							self.last_inc_char_2 = re.sub(r'#I', '', self.last_inc_char_2)
+							self.last_inc_char_2 = re.sub(r'#[1-4]', '', self.last_inc_char_2)
+							repl_params_3 = r'[0-9][0-9]#I'
+							print("### ###")
+							print(self.last_inc_char_2)
+							print("### ###")
+						else:
+							self.last_inc_char_2 = self.last_inc_char
+							repl_params_2 = repl_params
+							repl_params_3 = repl_params	
 					else:
 						self.last_inc_char = 0
+						self.last_inc_char_2 = 0
 							
 					if "Cassette(s)" in clswl.waitinglist.get(0):
 						clswl.cassette_label_container2 = []
 						clswl.cassette_label_container = re.findall(search_params, clswl.real_send_list[0])
 						
-						for j in range(int(self.last_inc_char), ((int(clswl.object_number_list[0]))+1)):
-							cassette_label_val = re.sub(repl_params, str(j), clswl.cassette_label_container[0])
+						for j in range(int(self.last_inc_char_2), (int(self.last_inc_char_2) + int(self.send_nb))):
+							cassette_label_val = re.sub(repl_params_3, str(j), clswl.cassette_label_container[0])
 							clswl.cassette_label_container2.append(cassette_label_val)	
 																
 						for x in range(0, int(self.send_nb)):
@@ -1112,8 +1160,8 @@ class Special_Functions():
 						clswl.slide_label_container2 = []
 						clswl.slide_label_container =  re.findall(search_params, clswl.real_send_list[0])
 						
-						for jj in range(int(self.last_inc_char), ((int(clswl.object_number_list[0]))+1)):
-							slide_label_val = re.sub(repl_params, str(jj), clswl.slide_label_container[0])
+						for jj in range(int(self.last_inc_char_2), (int(self.last_inc_char_2) + int(self.send_nb))):
+							slide_label_val = re.sub(repl_params_3, str(jj), clswl.slide_label_container[0])
 							clswl.slide_label_container2.append(slide_label_val)
 						
 						for y in range(0,int(self.send_nb)):
@@ -1231,3 +1279,186 @@ class Special_Functions():
 		if 'hes_and_trichrome_option' in classname.name]:
 			self.cls = classname		
 		return self.cls
+		
+
+	def test_font_size_line_cst(self):
+		count_line_1 = 0
+		count_line_2 = 0
+		count_line_3 = 0
+		
+		list_val_cbx_cst = []
+		list_val_cbx_cst_txtsize = []
+		
+		list_val_cbx = []
+		list_val_cbx_txtsize = []
+			
+		for classname in [classname for classname in Interface_ComboBoxCST]:
+			list_val_cbx_cst.append(classname.box.get())	
+				
+		for classname2 in [classname2 for classname2 in Interface_ComboBox]:
+			list_val_cbx.append(classname2.box.get())
+			list_val_cbx_txtsize.append(classname2.txt_size_ascii)
+		
+		for i in range(len(list_val_cbx_cst)):
+			for j in range(len(list_val_cbx)):
+				if list_val_cbx_cst[i] == list_val_cbx[j]:
+					list_val_cbx_cst_txtsize.append(list_val_cbx_txtsize[j])
+				else:
+					pass
+		
+		
+		for i in range(len(list_val_cbx_cst)):
+			if list_val_cbx_cst[i] == '':
+				list_val_cbx_cst_txtsize.insert(i, 0)
+			else:
+				pass				
+					
+		for k in range(len(list_val_cbx_cst_txtsize), len(list_val_cbx_cst)):
+			list_val_cbx_cst_txtsize.append('#0')
+			
+		for i in range(0,4):
+			if list_val_cbx_cst_txtsize[i] == '#1':
+				count_line_1 += 1
+			elif list_val_cbx_cst_txtsize[i] == '#2':
+				count_line_1 += 10
+			elif list_val_cbx_cst_txtsize[i] == '#3':
+				count_line_1 += 100
+			elif list_val_cbx_cst_txtsize[i] == '#4':
+				count_line_1 += 1000
+			else:
+				count_line_1 += 0
+				
+		for i in range(5,9):
+			if list_val_cbx_cst_txtsize[i] == '#1':
+				count_line_2 += 1
+			elif list_val_cbx_cst_txtsize[i] == '#2':
+				count_line_2 += 10
+			elif list_val_cbx_cst_txtsize[i] == '#3':
+				count_line_2 += 100
+			elif list_val_cbx_cst_txtsize[i] == '#4':
+				count_line_2 += 1000
+			else:
+				count_line_2 += 0
+		
+		for i in range(10,14):
+			if list_val_cbx_cst_txtsize[i] == '#1':
+				count_line_3 += 1
+			elif list_val_cbx_cst_txtsize[i] == '#2':
+				count_line_3 += 10
+			elif list_val_cbx_cst_txtsize[i] == '#3':
+				count_line_3 += 100
+			elif list_val_cbx_cst_txtsize[i] == '#4':
+				count_line_3 += 1000
+			else:
+				count_line_3 += 0
+										
+		if ((count_line_1 or count_line_2 or count_line_3) not in (1,2,3,4,5,10,20,30,40,50,100,200,300,400,500,1000,2000,3000,4000,5000)):
+			return 1
+		else:
+			return 0
+			
+			
+	def test_font_size_line_sld(self):
+		count_line_1 = 0
+		count_line_2 = 0
+		count_line_3 = 0
+		count_line_4 = 0
+		count_line_5 = 0
+		
+		list_val_cbx_sld = []
+		list_val_cbx_sld_txtsize = []
+		
+		list_val_cbx = []
+		list_val_cbx_txtsize = []
+			
+		for classname in [classname for classname in Interface_ComboBoxSDL]:
+			list_val_cbx_sld.append(classname.box.get())
+				
+		for classname2 in [classname2 for classname2 in Interface_ComboBox]:
+			list_val_cbx.append(classname2.box.get())
+			list_val_cbx_txtsize.append(classname2.txt_size_ascii)
+		
+		for i in range(len(list_val_cbx_sld)):
+			for j in range(len(list_val_cbx)):
+				if list_val_cbx_sld[i] == list_val_cbx[j]:
+					list_val_cbx_sld_txtsize.append(list_val_cbx_txtsize[j])
+				else:
+					pass
+		
+		for i in range(len(list_val_cbx_sld)):
+			if list_val_cbx_sld[i] == '':
+				list_val_cbx_sld_txtsize.insert(i,0)
+			else:
+				pass	
+			
+		for k in range(len(list_val_cbx_sld_txtsize), len(list_val_cbx_sld)):
+			list_val_cbx_sld_txtsize.append('#0')
+			
+		for i in range(0,4):
+			if list_val_cbx_sld_txtsize[i] == '#1':
+				count_line_1 += 1
+			elif list_val_cbx_sld_txtsize[i] == '#2':
+				count_line_1 += 10
+			elif list_val_cbx_sld_txtsize[i] == '#3':
+				count_line_1 += 100
+			elif list_val_cbx_sld_txtsize[i] == '#4':
+				count_line_1 += 1000
+			else:
+				count_line_1 += 0
+				
+		for i in range(5,9):
+			if list_val_cbx_sld_txtsize[i] == '#1':
+				count_line_2 += 1
+			elif list_val_cbx_sld_txtsize[i] == '#2':
+				count_line_2 += 10
+			elif list_val_cbx_sld_txtsize[i] == '#3':
+				count_line_2 += 100
+			elif list_val_cbx_sld_txtsize[i] == '#4':
+				count_line_2 += 1000
+			else:
+				count_line_2 += 0
+		
+		for i in range(10,14):
+			if list_val_cbx_sld_txtsize[i] == '#1':
+				count_line_3 += 1
+			elif list_val_cbx_sld_txtsize[i] == '#2':
+				count_line_3 += 10
+			elif list_val_cbx_sld_txtsize[i] == '#3':
+				count_line_3 += 100
+			elif list_val_cbx_sld_txtsize[i] == '#4':
+				count_line_3 += 1000
+			else:
+				count_line_3 += 0
+				
+				
+		for i in range(15,19):
+			if list_val_cbx_sld_txtsize[i] == '#1':
+				count_line_4 += 1
+			elif list_val_cbx_sld_txtsize[i] == '#2':
+				count_line_4 += 10
+			elif list_val_cbx_sld_txtsize[i] == '#3':
+				count_line_4 += 100
+			elif list_val_cbx_sld_txtsize[i] == '#4':
+				count_line_4 += 1000
+			else:
+				count_line_4 += 0
+				
+		for i in range(20,24):
+			if list_val_cbx_sld_txtsize[i] == '#1':
+				count_line_5 += 1
+			elif list_val_cbx_sld_txtsize[i] == '#2':
+				count_line_5 += 10
+			elif list_val_cbx_sld_txtsize[i] == '#3':
+				count_line_5 += 100
+			elif list_val_cbx_sld_txtsize[i] == '#4':
+				count_line_5 += 1000
+			else:
+				count_line_5 += 0		
+				
+						
+										
+		if ((count_line_1 or count_line_2 or count_line_3 or count_line_4 or count_line_5) not in (1,2,3,4,5,10,20,30,40,50,100,200,300,400,500,1000,2000,3000,4000,5000)):
+			return 1
+		else:
+			return 0		
+			

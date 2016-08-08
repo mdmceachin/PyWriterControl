@@ -95,7 +95,9 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 		
 		self.box.grid(column=column_combo, row=row_combo)
 		self.box.bind("<<ComboboxSelected>>", self.newselection)
-		self.box.bind('<Return>', self.update_values_evt)
+		self.box.bind('<KeyRelease>', self.newselection_keyrelease)
+		self.box.bind('<Button-1>', self.newselection)
+		self.box.bind('<Return>', self.newselection)
 		self.combo_label(name, column_label, row_label)
 	
 	def combo_ro(self, name, val, default_value, row_label, column_label, row_combo, column_combo):
@@ -128,16 +130,24 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 		
 		if val == 'O':
 			self.box.bind("<<ComboboxSelected>>", self.newselection)
-		
+			self.box.bind('<KeyRelease>', self.newselection_keyrelease)
+			self.box.bind('<Button-1>', self.newselection)
+			self.box.bind('<Return>', self.newselection)
 		elif val == 'H':
 			self.box.bind("<<ComboboxSelected>>", self.newselection)
-		
+			self.box.bind('<KeyRelease>', self.newselection_keyrelease)
+			self.box.bind('<Button-1>', self.newselection)
+			self.box.bind('<Return>', self.newselection)
 		elif val == 'P':
 			self.box.bind("<<ComboboxSelected>>", self.newselection)	
-		
+			self.box.bind('<KeyRelease>', self.newselection_keyrelease)
+			self.box.bind('<Button-1>', self.newselection)
+			self.box.bind('<Return>', self.newselection)
 		elif val == 'T':
 			self.box.bind("<<ComboboxSelected>>", self.textselection)
-		
+			self.box.bind('<KeyRelease>', self.newselection_keyrelease)
+			self.box.bind('<Button-1>', self.newselection)
+			self.box.bind('<Return>', self.newselection)
 		else:
 			pass		
 		
@@ -157,6 +167,9 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 			self.box.current(0)
 		
 		self.box.bind("<<ComboboxSelected>>", self.newselection)
+		self.box.bind('<KeyRelease>', self.newselection_keyrelease)
+		self.box.bind('<Button-1>', self.newselection)
+		self.box.bind('<Return>', self.newselection)
 		self.box.grid(column=column_combo, row=row_combo)		
 		self.combo_label(name, column_label, row_label)
 	
@@ -182,7 +195,9 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 		
 		if val == 'T':
 			self.box_txt.bind("<<ComboboxSelected>>", self.textselection)
-		
+			self.box_txt.bind('<KeyRelease>', self.newselection_keyrelease)
+			self.box_txt.bind('<Button-1>', self.newselection)
+			self.box_txt.bind('<Return>', self.newselection)
 		else:
 			pass
 	
@@ -196,12 +211,14 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 		self.txt_size = self.box_txt.get()
 		return self.txt_size
 	
-	def newselection(self, event):
+	def newselection_keyrelease(self,event):
 		self.value_of_combo = self.box.get()
 		for classname in [classname for classname in Interface_ComboBoxCST]:
 			classname.get_current_index()
+			classname.box.update_idletasks()
 		for classname in [classname for classname in Interface_ComboBoxSDL]:
 			classname.get_current_index()
+			classname.box.update_idletasks()
 			
 		for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in ['',-1]]:
 			classname.box.delete(0)
@@ -215,6 +232,36 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 			classname.box.update_idletasks()
 			classname.box.current(classname.value_of_current_selection)
 			
+	def newselection(self, event):
+		self.value_of_combo = self.box.get()
+		for classname in [classname for classname in Interface_ComboBoxCST]:
+			classname.get_current_index()
+			classname.box.update_idletasks()
+		for classname in [classname for classname in Interface_ComboBoxSDL]:
+			classname.get_current_index()
+			classname.box.update_idletasks()
+			
+		for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in ['',-1]]:
+			classname.box.delete(0)
+			classname.get_fields()
+			classname.box.update_idletasks()
+			classname.box.current(classname.value_of_current_selection)
+					
+		for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in ['',-1]]:
+			classname.box.delete(0)
+			classname.get_fields()
+			classname.box.update_idletasks()
+			classname.box.current(classname.value_of_current_selection)
+		
+		valuesource = self.valuesourcename
+		txt = self.value_of_combo
+		vals = self.box.cget('values')
+		if not vals:
+			self.box.configure(values = (txt, ))
+			self.write_file(valuesource)
+		elif txt not in vals:
+			self.box.configure(values = vals + (txt, ))
+			self.write_file(valuesource)
 		return self.value_of_combo
 	
 	def textselection(self, event):
@@ -251,20 +298,6 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 		self.box.configure(values=self.valuesource)
 		return 'break'
 
-	def update_values_evt(self, evt):
-		valuesource = self.valuesourcename
-		txt = self.box.get()
-		vals = self.box.cget('values')
-		
-		if not vals:
-			self.box.configure(values = (txt, ))
-			self.write_file(valuesource)
-		
-		elif txt not in vals:
-			self.box.configure(values = vals + (txt, ))
-			self.write_file(valuesource)
-		
-		return 'break'
 		
 	def check_file(self, filename):
 		owd = os.getcwd()
@@ -565,7 +598,7 @@ class Interface_ComboBoxSDL(metaclass=IterableComboBoxSDL):
 		self.valuesource.append('')
 		self.valuesource_edit.append('')
 		self.box.configure(values=self.valuesource_edit)
-		
+						
 		return (self.valuesource, self.valuesource_edit)
 
 ################################################################################################
@@ -913,7 +946,7 @@ class Interface_EntryBox(metaclass=IterableEntryBox):
 		 width=28, exportselection=0)
 
 		self.entry.grid(column=column_entry, row=row_entry)
-		self.entry.bind('<KeyPress>', self.newselection)
+		self.entry.bind('<KeyRelease>', self.newselection)
 		self.entry.bind('<Button-1>', self.newselection)
 		self.entry_label(name, column_label, row_label)
 

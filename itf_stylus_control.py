@@ -40,10 +40,10 @@ class Interface_StylusControl(metaclass = Iterable_StylusControl):
 		self.real_send_list = []
 		self.object_number_list = []
 		self.cassette_label_container = []
-		self.stylus_left = 0
-		self.stylus_right = 0
-		self.stylus_up = 0
-		self.stylus_down = 0
+		self.stylus_left = 00
+		self.stylus_right = 00
+		self.stylus_up = 00
+		self.stylus_down = 00
 		self.stylus_command = '#U00#D00#L00#R00'
 		
 	def styluswindow(self):
@@ -53,7 +53,7 @@ class Interface_StylusControl(metaclass = Iterable_StylusControl):
 		self.stylus_left_label.grid(row=0, column=0)
 		self.stylus_left = tk.StringVar()
 		self.stylus_left_entry = tk.Entry(self.styluswindow_subframe, textvariable=self.stylus_left, width=10, exportselection=0)
-		self.stylus_left_entry.insert(0, '0')
+		self.stylus_left_entry.insert(0, '00')
 		self.stylus_left_entry.bind('<Return>', self.newselection_left)
 		self.stylus_left_entry.bind('<Button-1>', self.newselection_left)
 		self.stylus_left_entry.grid(row=0, column=1)
@@ -62,7 +62,7 @@ class Interface_StylusControl(metaclass = Iterable_StylusControl):
 		self.stylus_right_label.grid(row=1, column=0)
 		self.stylus_right = tk.StringVar()
 		self.stylus_right_entry = tk.Entry(self.styluswindow_subframe, textvariable=self.stylus_right, width=10, exportselection=0)
-		self.stylus_right_entry.insert(0, '0')
+		self.stylus_right_entry.insert(0, '00')
 		self.stylus_right_entry.bind('<Return>', self.newselection_right)
 		self.stylus_right_entry.bind('<Button-1>', self.newselection_right)
 		self.stylus_right_entry.grid(row=1, column=1)
@@ -71,7 +71,7 @@ class Interface_StylusControl(metaclass = Iterable_StylusControl):
 		self.stylus_up_label.grid(row=2, column=0)
 		self.stylus_up = tk.StringVar()
 		self.stylus_up_entry = tk.Entry(self.styluswindow_subframe, textvariable=self.stylus_up, width=10, exportselection=0)
-		self.stylus_up_entry.insert(0, '0')
+		self.stylus_up_entry.insert(0, '00')
 		self.stylus_up_entry.bind('<Return>', self.newselection_up)
 		self.stylus_up_entry.bind('<Button-1>', self.newselection_up)
 		self.stylus_up_entry.grid(row=2, column=1)
@@ -80,7 +80,7 @@ class Interface_StylusControl(metaclass = Iterable_StylusControl):
 		self.stylus_down_label.grid(row=3, column=0)
 		self.stylus_down = tk.StringVar()
 		self.stylus_down_entry = tk.Entry(self.styluswindow_subframe, textvariable=self.stylus_down, width=10, exportselection=0)
-		self.stylus_down_entry.insert(0, '0')
+		self.stylus_down_entry.insert(0, '00')
 		self.stylus_down_entry.bind('<Return>', self.newselection_down)
 		self.stylus_down_entry.bind('<Button-1>', self.newselection_down)
 		self.stylus_down_entry.grid(row=3, column=1)
@@ -122,26 +122,18 @@ class Interface_StylusControl(metaclass = Iterable_StylusControl):
 		self.stylus_down = self.stylus_down_entry.get()
 		
 		# Ugly. I know. But I am braindead atm.
-		if str(self.stylus_left).isnumeric():
-			if str(self.stylus_right).isnumeric():
-				if str(self.stylus_up).isnumeric():
-					if str(self.stylus_down).isnumeric():
-						if int(self.stylus_left) < 10:
-							if int(self.stylus_right) < 10:
-								if int(self.stylus_up) < 10:
-									if int(self.stylus_down) < 10:
-										send_stylus_settings = ConnectPort()
-										command = ('#U0', str(self.stylus_up), '#D0', str(self.stylus_down), '#L0', str(self.stylus_left), '#R0', str(self.stylus_right))
-										self.stylus_command = ''.join(command)
-										for classname in [classname for classname in Interface_ComboBox]: 
-											if 'port_number_slidewriter' in classname.name:
-												self.slidewriter_port = classname.box.get()
-										
-										send_stylus_settings.send_writer(self.slidewriter_port, self.stylus_command)
-										self.styluswindow_subframe.destroy()
+		if ((str(self.stylus_left).isnumeric()) and (str(self.stylus_right).isnumeric()) and (str(self.stylus_up).isnumeric()) and (str(self.stylus_down).isnumeric()) and (int(self.stylus_left) < 100) and (int(self.stylus_right) < 100) and (int(self.stylus_up) < 100) and (int(self.stylus_down) < 100)) :
+			send_stylus_settings = ConnectPort()
+			command = ('#U', str(self.stylus_up), '#D', str(self.stylus_down), '#L', str(self.stylus_left), '#R', str(self.stylus_right))
+			self.stylus_command = ''.join(command)
+			for classname in [classname for classname in Interface_ComboBox]: 
+				if 'port_number_slidewriter' in classname.name:
+					self.slidewriter_port = classname.box.get()
+			send_stylus_settings.send_writer(self.slidewriter_port, self.stylus_command)
+			self.styluswindow_subframe.destroy()
 		else:
 			warning_pop_up = tk.Toplevel()
-			warning_message = ("Erreur : valeurs numériques (<10) uniquement.")
+			warning_message = ("Erreur : valeurs numériques (<100) uniquement.")
 			popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=40)
 			popup.pack()
 			btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
