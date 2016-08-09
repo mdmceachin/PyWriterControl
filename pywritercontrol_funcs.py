@@ -1348,6 +1348,10 @@ class Special_Functions():
 			list_val_cbx.append(classname2.box.get())
 			list_val_cbx_txtsize.append(classname2.txt_size_ascii)
 		
+		for classname3 in [classname3 for classname3 in Interface_EntryBox]:
+			list_val_cbx.append(classname3.get_val())
+			list_val_cbx_txtsize.append(classname3.txt_size_ascii)	
+		
 		for i in range(len(list_val_cbx_cst)):
 			for j in range(len(list_val_cbx)):
 				if list_val_cbx_cst[i] == list_val_cbx[j]:
@@ -1426,6 +1430,10 @@ class Special_Functions():
 		for classname2 in [classname2 for classname2 in Interface_ComboBox]:
 			list_val_cbx.append(classname2.box.get())
 			list_val_cbx_txtsize.append(classname2.txt_size_ascii)
+		
+		for classname3 in [classname3 for classname3 in Interface_EntryBox]:
+			list_val_cbx.append(classname3.get_val())
+			list_val_cbx_txtsize.append(classname3.txt_size_ascii)
 		
 		for i in range(len(list_val_cbx_sld)):
 			for j in range(len(list_val_cbx)):
