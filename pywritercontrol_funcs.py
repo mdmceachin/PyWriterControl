@@ -1349,9 +1349,12 @@ class Special_Functions():
 			list_val_cbx_txtsize.append(classname2.txt_size_ascii)
 		
 		for classname3 in [classname3 for classname3 in Interface_EntryBox]:
-			list_val_cbx.append(classname3.get_val())
-			list_val_cbx_txtsize.append(classname3.txt_size_ascii)	
-		
+			if classname3.get_val() != '':
+				list_val_cbx.append(classname3.get_val())
+				list_val_cbx_txtsize.append(classname3.txt_size_ascii)	
+			else:
+				pass
+				
 		for i in range(len(list_val_cbx_cst)):
 			for j in range(len(list_val_cbx)):
 				if list_val_cbx_cst[i] == list_val_cbx[j]:
@@ -1406,8 +1409,22 @@ class Special_Functions():
 				count_line_3 += 0
 										
 		if ((count_line_1 or count_line_2 or count_line_3) not in (1,2,3,4,5,10,20,30,40,50,100,200,300,400,500,1000,2000,3000,4000,5000)):
+			print('return 1')
+			print('line 1')
+			print(count_line_1)
+			print('line 2')
+			print(count_line_2)
+			print('line 3')
+			print(count_line_3)
 			return 1
 		else:
+			print('return 0')
+			print('line 1')
+			print(count_line_1)
+			print('line 2')
+			print(count_line_2)
+			print('line 3')
+			print(count_line_3)
 			return 0
 			
 			
@@ -1432,8 +1449,11 @@ class Special_Functions():
 			list_val_cbx_txtsize.append(classname2.txt_size_ascii)
 		
 		for classname3 in [classname3 for classname3 in Interface_EntryBox]:
-			list_val_cbx.append(classname3.get_val())
-			list_val_cbx_txtsize.append(classname3.txt_size_ascii)
+			if classname3.get_val() != '':
+				list_val_cbx.append(classname3.get_val())
+				list_val_cbx_txtsize.append(classname3.txt_size_ascii)
+			else:
+				pass	
 		
 		for i in range(len(list_val_cbx_sld)):
 			for j in range(len(list_val_cbx)):
