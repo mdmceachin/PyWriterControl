@@ -114,7 +114,6 @@ subframe_7 = tk.LabelFrame(frame_right, text="Commandes", padx=5, pady=5)
 
 
 ################################################################################################
-########################### A STUPID, USELESS, AND THUS AWSESOME, FUNCTIONNALITY #############################
 ################################################################################################
 
 # A set of useless functions made to please the technicians here

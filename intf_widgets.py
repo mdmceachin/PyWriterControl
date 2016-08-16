@@ -220,13 +220,13 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 			classname.get_current_index()
 			classname.box.update_idletasks()
 			
-		for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in ['',-1, '-1']]:
+		for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in ['',-1]]:
 			classname.box.delete(0)
 			classname.get_fields()
 			classname.box.update_idletasks()
 			classname.box.current(classname.value_of_current_selection)
 					
-		for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in ['',-1, '-1']]:
+		for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in ['',-1]]:
 			classname.box.delete(0)
 			classname.get_fields()
 			classname.box.update_idletasks()
@@ -241,13 +241,13 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 			classname.get_current_index()
 			classname.box.update_idletasks()
 			
-		for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in ['',-1, '-1']]:
+		for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in ['',-1]]:
 			classname.box.delete(0)
 			classname.get_fields()
 			classname.box.update_idletasks()
 			classname.box.current(classname.value_of_current_selection)
 					
-		for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in ['',-1, '-1']]:
+		for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in ['',-1]]:
 			classname.box.delete(0)
 			classname.get_fields()
 			classname.box.update_idletasks()
@@ -957,12 +957,12 @@ class Interface_EntryBox(metaclass=IterableEntryBox):
 	def newselection(self, event):
 		self.value_of_entry = self.entry.get()
 		if self.name != 'profile_name':
-			for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in ['', '-1', -1]]: # added an integrer
+			for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in [-1, '-1','']]: # added an integrer
 				classname.get_fields()
 				classname.box.update_idletasks()
 				classname.box.current(classname.value_of_current_selection)
 			
-			for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in ['', '-1', -1]]: # added an integrer
+			for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in [-1, '-1', '']]: # added an integrer
 				classname.get_fields()
 				classname.box.update_idletasks()
 				classname.box.current(classname.value_of_current_selection)	

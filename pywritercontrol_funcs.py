@@ -859,6 +859,20 @@ class Special_Functions():
 		return 1
 		
 	def send_to_queue(self):
+		
+		if self.get_increment_number() > 1:
+			warning_pop_up = tk.Toplevel()
+			warning_message = ("Erreur : trop d'incréments, merci de décocher des cases.\n" 
+			+ " Un seul champ maximum par série ! \n" 
+			+ "[Nombre de cases cochées : " + str(self.get_increment_number()) + "]")
+			popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+			popup.pack()
+			btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+			btn_OK.pack()
+			return 0
+			
+		else:
+			pass
 		# Retrieve all the values from the organisation fields
 		
 		label_ctrl = self.test_char_lines()
@@ -1062,19 +1076,7 @@ class Special_Functions():
 		# commands are skipped, probably because the machines buffers are
 		# not that big
 			
-		if self.get_increment_number() > 1:
-			warning_pop_up = tk.Toplevel()
-			warning_message = ("Erreur : trop d'incréments, merci de décocher des cases.\n" 
-			+ " Un seul champ maximum par série ! \n" 
-			+ "[Nombre de cases cochées : " + str(self.get_increment_number()) + "]")
-			popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
-			popup.pack()
-			btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
-			btn_OK.pack()
-			return 0
-			
-		else:
-			pass
+
 		
 		for classname in [classname for classname in Interface_TimeSetWindow]:
 			self.slide_sleep_time = int(classname.get_sld())
@@ -1085,10 +1087,6 @@ class Special_Functions():
 			clswl = self.get_cls_list()
 			cls_hes_tm = self.get_cls_hes_trichrome_checkbutton()
 			send_command = ConnectPort()
-			
-			# Just a little placeholder to separate lines sent by the different
-			# send_command() call
-			# Remove this placeholder if already present
 			
 			if clswl.waitinglist.get(0) == '':
 				clswl.waitinglist.delete(0)
