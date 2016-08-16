@@ -1407,24 +1407,15 @@ class Special_Functions():
 				count_line_3 += 1000
 			else:
 				count_line_3 += 0
-										
-		if ((count_line_1 or count_line_2 or count_line_3) not in (1,2,3,4,5,10,20,30,40,50,100,200,300,400,500,1000,2000,3000,4000,5000)):
-			print('return 1')
-			print('line 1')
-			print(count_line_1)
-			print('line 2')
-			print(count_line_2)
-			print('line 3')
-			print(count_line_3)
+		
+		possible_values_cst = (0,1,2,3,4,5,10,20,30,40,50,100,200,300,400,500,1000,2000,3000,4000,5000)
+		if (count_line_1) not in (possible_values_cst):
+			return 1
+		elif (count_line_2) not in (possible_values_cst):
+			return 1
+		elif (count_line_3) not in (possible_values_cst):
 			return 1
 		else:
-			print('return 0')
-			print('line 1')
-			print(count_line_1)
-			print('line 2')
-			print(count_line_2)
-			print('line 3')
-			print(count_line_3)
 			return 0
 			
 			
@@ -1533,8 +1524,16 @@ class Special_Functions():
 				count_line_5 += 0		
 				
 						
-										
-		if ((count_line_1 or count_line_2 or count_line_3 or count_line_4 or count_line_5) not in (1,2,3,4,5,10,20,30,40,50,100,200,300,400,500,1000,2000,3000,4000,5000)):
+		possible_values_sld = (0,1,2,3,4,5,10,20,30,40,50,100,200,300,400,500,1000,2000,3000,4000,5000) 								
+		if (count_line_1) not in (possible_values_sld):
+			return 1
+		elif (count_line_2) not in (possible_values_sld):
+			return 1
+		elif (count_line_3) not in (possible_values_sld):
+			return 1
+		elif (count_line_4) not in (possible_values_sld):
+			return 1		
+		elif (count_line_5) not in (possible_values_sld):
 			return 1
 		else:
 			return 0		
