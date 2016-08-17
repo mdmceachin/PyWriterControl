@@ -36,8 +36,8 @@ class Special_Functions():
 		# This is especially sad when writing a set of blade using an incrementation somewhere in the label
 		# As it will let some holes in the numerotation...
 		
-		self.slide_sleep_time = 30 # slides : ideally 12-25 sec, depending on the label size ;
-		self.cassette_sleep_time = 12 # cassette : around 8-20 sec, depending on the label size
+		self.slide_sleep_time = 10 # slides : ideally 12-25 sec, depending on the label size ;
+		self.cassette_sleep_time = 5 # cassette : around 8-20 sec, depending on the label size
 		self.count = ''
 		self.parent = parent
 		self.cassette_val_list_simple = []
@@ -620,9 +620,10 @@ class Special_Functions():
 
 		cls1 = self.get_cls_radio()
 		
-		if cls1.get_radio_val() != 2:
+		if cls1.get_radio_val() == 1:
 			self.cst_line1, self.cst_line2, self.cst_line3 = self.get_cassette_line()
-			self.cst_list, self.cassette_label, self.cassette_display_string, self.cst_nb = self.get_cassette_organisation()
+			self.cassette_label, self.cassette_display_string, self.cassette_control, self.cst_nb = self.get_cassette_organisation()
+			
 			self.cassette_line_number = self.count_cassette_line_number()
 			for classname in Interface_ComboBoxCST:
 				classname.valuesource, classname.valuesource_edit = classname.get_fields()	
@@ -735,9 +736,9 @@ class Special_Functions():
 						return 0
 						break
 							
-		elif cls1.get_radio_val() != 1:
+		elif cls1.get_radio_val() == 2:
 			self.sdl_line1, self.sdl_line2, self.sdl_line3, self.sdl_line4, self.sdl_line5 = self.get_slide_line()
-			self.sdl_list, self.slidelabel_label, self.slide_display_string, self.slide_nb = self.get_slide_organisation()
+			self.slidelabel_label, self.slide_display_string, self.slide_control, self.slide_nb = self.get_slide_organisation()
 			self.slide_line_number = self.count_slide_line_number()
 			for classname in Interface_ComboBoxSDL:
 				classname.valuesource, classname.valuesource_edit = classname.get_fields()
@@ -798,7 +799,7 @@ class Special_Functions():
 						pass
 
 					for x in [x for x in [self.sdl_line1_j, self.sdl_line2_j, self.sdl_line3_j,
-					self.sdl_line4_j, self.sdl_line5_j] if (len(x) >13)]:
+					self.sdl_line4_j, self.sdl_line5_j] if (len(x) >12)]:
 						if x == self.sdl_line1_j:
 							size = str(len(x))
 							line = '1, lame'
@@ -817,7 +818,7 @@ class Special_Functions():
 
 						warning_pop_up = tk.Toplevel()
 						warning_message = ("Erreur : chaine de caractère trop longue ! \n [Ligne " + line + " : "
-						+ size + " caractères] \n 13 caractères maximum par ligne (police : moyenne) !")
+						+ size + " caractères] \n 12 caractères maximum par ligne (police : moyenne) !")
 						popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
 						popup.pack()
 						btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
@@ -853,9 +854,244 @@ class Special_Functions():
 						btn_OK.pack()
 						return 0
 						break
-		else:
-			pass
+		
+		elif cls1.get_radio_val() == 3:
+			self.cst_line1, self.cst_line2, self.cst_line3 = self.get_cassette_line()
+			self.cassette_label, self.cassette_display_string, self.cassette_control, self.cst_nb = self.get_cassette_organisation()
+			
+			self.cassette_line_number = self.count_cassette_line_number()
+			for classname in Interface_ComboBoxCST:
+				classname.valuesource, classname.valuesource_edit = classname.get_fields()	
 				
+				if '#1' in self.cassette_label:
+					if self.cassette_line_number > 2:
+						warning_pop_up = tk.Toplevel()
+						warning_message = ("Erreur : police=grande, deux lignes maximum.")
+						popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+						popup.pack()
+						btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+						btn_OK.pack()
+						return 0
+						break
+					
+									
+					else:
+						pass	
+
+					for x in [x for x in [self.cst_line1_j, self.cst_line2_j, self.cst_line3_j] if (len(x) >8)]:
+						if x == self.cst_line1_j:
+							size = str(len(x))
+							line = '1, cassette'
+						elif x == self.cst_line2_j:
+							size = str(len(x))
+							line = '2, cassette'
+						elif x == self.cst_line3_j:
+							size = str(len(x))
+							line = '3, cassette'					 
+
+
+						warning_pop_up = tk.Toplevel()
+						warning_message = ("Erreur : chaine de caractère trop longue ! \n [Ligne " + line + " : "
+						+ size + " caractères] \n 8 caractères maximum par ligne (police : grande) !")
+						popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+						popup.pack()
+						btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+						btn_OK.pack()
+						return 0
+						break
+
+				elif '#2' in self.cassette_label:
+					if self.cassette_line_number > 4:
+						warning_pop_up = tk.Toplevel()
+						warning_message = ("Erreur : police=moyenne, quatre lignes maximum.")
+						popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+						popup.pack()
+						btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+						btn_OK.pack()
+						return 0
+						break
+										
+					else:
+						pass
+
+					for x in [x for x in [self.cst_line1_j, self.cst_line2_j, self.cst_line3_j] if (len(x) >13)]:
+						
+						if x == self.cst_line1_j:
+							size = str(len(x))
+							line = '1, cassette'
+						elif x == self.cst_line2_j:
+							size = str(len(x))
+							line = '2, cassette'
+						elif x == self.cst_line3_j:
+							size = str(len(x))
+							line = '3, cassette'
+
+
+						warning_pop_up = tk.Toplevel()
+						warning_message = ("Erreur : chaine de caractère trop longue ! \n [Ligne " + line + " : "
+						+ size + " caractères] \n 13 caractères maximum par ligne (police = moyenne) !")
+						popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+						popup.pack()
+						btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+						btn_OK.pack()
+						return 0
+						break
+					
+				else:
+					if self.cassette_line_number > 3:
+						warning_pop_up = tk.Toplevel()
+						warning_message = ("Erreur : Cassette, trois lignes maximum.")
+						popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+						popup.pack()
+						btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+						btn_OK.pack()
+						return 0
+						break
+										
+					else:
+						pass	
+					
+					for x in [x for x in [self.cst_line1_j, self.cst_line2_j, self.cst_line3_j] if (len(x) >16)]:
+						if x == self.cst_line1_j:
+							size = str(len(x))
+							line = '1, cassette'
+						elif x == self.cst_line2_j:
+							size = str(len(x))
+							line = '2, cassette'
+						elif x == self.cst_line3_j:
+							size = str(len(x))
+							line = '3, cassette'					 
+
+						warning_pop_up = tk.Toplevel()
+						warning_message = ("Erreur : chaine de caractère trop longue ! \n [Ligne " + line + " : "
+						+ size + " caractères] \n 16 caractères maximum par ligne !")
+						popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+						popup.pack()
+						btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+						btn_OK.pack()
+						return 0
+						break
+			
+			
+			self.sdl_line1, self.sdl_line2, self.sdl_line3, self.sdl_line4, self.sdl_line5 = self.get_slide_line()
+			self.slidelabel_label, self.slide_display_string, self.slide_control, self.slide_nb = self.get_slide_organisation()
+			self.slide_line_number = self.count_slide_line_number()
+			for classname in Interface_ComboBoxSDL:
+				classname.valuesource, classname.valuesource_edit = classname.get_fields()
+				if '#1' in self.slidelabel_label:
+					if self.slide_line_number > 2:
+						warning_pop_up = tk.Toplevel()
+						warning_message = ("Erreur : police=grande, deux lignes maximum.")
+						popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+						popup.pack()
+						btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+						btn_OK.pack()
+						return 0
+						break
+
+					else:
+						pass	
+
+					for x in [x for x in [self.sdl_line1_j, self.sdl_line2_j, self.sdl_line3_j,
+					self.sdl_line4_j, self.sdl_line5_j] if (len(x) >8)]:
+						if x == self.sdl_line1_j:
+							size = str(len(x))
+							line = '1, lame'
+						elif x == self.sdl_line2_j:
+							size = str(len(x))
+							line = '2, lame'
+						elif x == self.sdl_line3_j:
+							size = str(len(x))
+							line = '3, lame'					 
+						elif x == self.sdl_line4_j:
+							size = str(len(x))
+							line = '4, lame'
+						elif x == self.sdl_line5_j:
+							size = str(len(x))
+							line = '5, lame'
+
+						warning_pop_up = tk.Toplevel()
+						warning_message = ("Erreur : chaine de caractère trop longue ! \n [Ligne " + line + " : "
+						+ size + " caractères] \n 8 caractères maximum par ligne (police : grande) !")
+						popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+						popup.pack()
+						btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+						btn_OK.pack()
+						return 0
+						break
+
+				elif '#2' in self.slidelabel_label:
+					if self.slide_line_number > 4:
+						warning_pop_up = tk.Toplevel()
+						warning_message = ("Erreur : police=moyenne, quatre lignes maximum.")
+						popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+						popup.pack()
+						btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+						btn_OK.pack()
+						return 0
+						break
+						
+					else:
+						pass
+
+					for x in [x for x in [self.sdl_line1_j, self.sdl_line2_j, self.sdl_line3_j,
+					self.sdl_line4_j, self.sdl_line5_j] if (len(x) >12)]:
+						if x == self.sdl_line1_j:
+							size = str(len(x))
+							line = '1, lame'
+						elif x == self.sdl_line2_j:
+							size = str(len(x))
+							line = '2, lame'
+						elif x == self.sdl_line3_j:
+							size = str(len(x))
+							line = '3, lame'					 
+						elif x == self.sdl_line4_j:
+							size = str(len(x))
+							line = '4, lame'
+						elif x == self.sdl_line5_j:
+							size = str(len(x))
+							line = '5, lame'
+
+						warning_pop_up = tk.Toplevel()
+						warning_message = ("Erreur : chaine de caractère trop longue ! \n [Ligne " + line + " : "
+						+ size + " caractères] \n 12 caractères maximum par ligne (police : moyenne) !")
+						popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+						popup.pack()
+						btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+						btn_OK.pack()
+						return 0
+						break					
+
+				else:
+					for x in [x for x in [self.sdl_line1_j, self.sdl_line2_j, self.sdl_line3_j,
+					self.sdl_line4_j, self.sdl_line5_j] if (len(x) >16)]:				
+						if x == self.sdl_line1_j:
+							size = str(len(x))
+							line = '1, lame'
+						elif x == self.sdl_line2_j:
+							size = str(len(x))
+							line = '2, lame'
+						elif x == self.sdl_line3_j:
+							size = str(len(x))
+							line = '3, lame'					 
+						elif x == self.sdl_line4_j:
+							size = str(len(x))
+							line = '4, lame'
+						elif x == self.sdl_line5_j:
+							size = str(len(x))
+							line = '5, lame'
+											
+						warning_pop_up = tk.Toplevel()
+						warning_message = ("Erreur : chaine de caractère trop longue ! \n [Ligne " + line + " : "
+						+ size + " caractères] \n 16 caractères maximum par ligne !")
+						popup = tk.Label(warning_pop_up, text=warning_message, height=0, width=50)
+						popup.pack()
+						btn_OK = tk.Button(warning_pop_up, text="OK", bg="ivory2", command=warning_pop_up.destroy)
+						btn_OK.pack()
+						return 0
+						break		
+		
+		
 		return 1
 		
 	def send_to_queue(self):
@@ -1154,21 +1390,21 @@ class Special_Functions():
 							clswl.cassette_label_container2.append(cassette_label_val)	
 																
 						for x in range(0, int(self.send_nb)):
-							print(x+1)
+							#print(x+1)
 							print(clswl.cassette_label_container2[x])
 							send_command.open_port(self.cassettewriter_port)
 							send_command.send_writer(self.cassettewriter_port, clswl.cassette_label_container2[x])
 							received_writer = b''
 							count = 0
 							while received_writer == b'':
-								if count == 25:
-									print("ERR : timeout")
+								if count == 20:
+									print("[ ERREUR ] [ TIMEOUT ] La chaîne a été ignorée par la machine.")
 									send_command.close_port(self.cassettewriter_port)
 									break
 									
 								received_writer = send_command.receive_writer()
 								if received_writer != b'':
-									print("OK")
+									print("[ OK ]")
 									send_command.close_port(self.cassettewriter_port)
 									break
 								else:
@@ -1190,21 +1426,21 @@ class Special_Functions():
 							clswl.slide_label_container2.append(slide_label_val)
 						
 						for y in range(0,int(self.send_nb)):
-							print(y+1)
+							#print(y+1)
 							print(clswl.slide_label_container2[y])
 							send_command.open_port(self.slidewriter_port)
 							send_command.send_writer(self.slidewriter_port, clswl.slide_label_container2[y])
 							received_writer = b''
 							count = 0
 							while received_writer == b'':
-								if count == 25:
-									print("ERR : timeout")
+								if count == 20:
+									print("[ ERREUR ] [ TIMEOUT ] La chaîne a été ignorée par la machine.")
 									send_command.close_port(self.slidewriter_port)
 									break
 								
 								received_writer = send_command.receive_writer()
 								if received_writer != b'':
-									print("OK")
+									print("[ OK ]")
 									send_command.close_port(self.slidewriter_port)
 									break
 								else:

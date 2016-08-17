@@ -353,68 +353,68 @@ tk.Label(subframe_2, text="Incrémenter").grid(row=0,column=3)
 
 # Comboboxes : text fields
 study_number.combo_rw("Numéro d'étude : ",'study_number',0,1,0,1,1)
-study_number.combo_txt('T', 4,1,4,1,2)
+study_number.combo_txt('T', 1,1,4,1,2)
 study_number.box_txt.configure(width=10)
 study_number.checkbox(1,3)
 
 time_sched.combo_rw("Délai : ",'time_schedule',0,2,0,2,1)
-time_sched.combo_txt('T', 4,2,4,2,2)
+time_sched.combo_txt('T', 1,2,4,2,2)
 time_sched.box_txt.configure(width=10)
 time_sched.checkbox(2,3)
 
 animal_number.combo_rw("Numéro animal : ", "animal_number", 0,3,0,3,1)
-animal_number.combo_txt('T', 4,3,4,3,2)
+animal_number.combo_txt('T', 1,3,4,3,2)
 animal_number.box_txt.configure(width=10)
 animal_number.checkbox(3,3)
 
 gender.combo_rw("Genre : ",'animal_gender',0,4,0,4,1)
-gender.combo_txt('T', 4,4,4,4,2)
+gender.combo_txt('T', 1,4,4,4,2)
 gender.box_txt.configure(width=10)
 gender.checkbox(4,3)
 
 group.combo_rw("Groupe : ",'group',0,5,0,5,1)
-group.combo_txt('T', 4,5,4,5,2)
+group.combo_txt('T', 1,5,4,5,2)
 group.box_txt.configure(width=10)
 group.checkbox(5,3)
 
 organs.combo_rw("Organe(s) : ", 'organs',0,6,0,6,1)
-organs.combo_txt('T', 4,6,4,6,2)
+organs.combo_txt('T', 1,6,4,6,2)
 organs.box_txt.configure(width=10)
 organs.checkbox(6,3)
 
 rank.combo_rw("Rang : ", 'rank',0,7,0,7,1)
-rank.combo_txt('T', 4,7,4,7,2)
+rank.combo_txt('T', 1,7,4,7,2)
 rank.box_txt.configure(width=10)
 rank.checkbox(7,3)
 
 coloration.combo_rw("Coloration : ", 'coloration',0,8,0,8,1)
-coloration.combo_txt('T', 4,8,4,8,2)
+coloration.combo_txt('T', 1,8,4,8,2)
 coloration.box_txt.configure(width=10)
 coloration.checkbox(8,3)
 
 animal_type.combo_rw("Espèce : ",'animal_type',0,9,0,9,1)
-animal_type.combo_txt('T', 4,9,4,9,2)
+animal_type.combo_txt('T', 1,9,4,9,2)
 animal_type.box_txt.configure(width=10)
 animal_type.checkbox(9,3)
 
 # Entryboxes : free text
 sup_data1.entry_free("Champ libre (1) : ",12,0,12,1)
-sup_data1.combo_txt('T', 4,12,4,12,2)
+sup_data1.combo_txt('T', 1,12,4,12,2)
 sup_data1.box_txt.configure(width=10)
 sup_data1.checkbox(12,3)
 
 sup_data2.entry_free("Champ libre (2) : ",13,0,13,1)
-sup_data2.combo_txt('T', 4,13,4,13,2)
+sup_data2.combo_txt('T', 1,13,4,13,2)
 sup_data2.box_txt.configure(width=10)
 sup_data2.checkbox(13,3)
 
 sup_data3.entry_free("Champ libre (3) : ",14,0,14,1)
-sup_data3.combo_txt('T', 4,14,4,14,2)
+sup_data3.combo_txt('T', 1,14,4,14,2)
 sup_data3.box_txt.configure(width=10)
 sup_data3.checkbox(14,3)
 
 sup_data4.entry_free("Champ libre (4) : ",15,0,15,1)
-sup_data4.combo_txt('T', 4,15,4,15,2)
+sup_data4.combo_txt('T', 1,15,4,15,2)
 sup_data4.box_txt.configure(width=10)
 sup_data4.checkbox(15,3)
 

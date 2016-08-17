@@ -54,7 +54,7 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 		self.value_of_txt = ''
 		self.list_content = []
 		self.txt_size_user = ["Grand", "Moyen", "Petit", "Très Petit", '']
-		self.txt_size_ascii = '#4'
+		self.txt_size_ascii = '#2'
 		self.valuesourcename = ''
 		self.value_of_checkbox = 0
 		
@@ -189,7 +189,7 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 		if str(default_value).isnumeric() == True:
 			self.box_txt.current(default_value)
 		else:
-			self.box_txt.current(0)
+			self.box_txt.current(2)
 		
 		self.box_txt.grid(column=column_combo, row=row_combo)
 		
@@ -220,13 +220,13 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 			classname.get_current_index()
 			classname.box.update_idletasks()
 			
-		for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in ['',-1]]:
+		for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in ['',-1,' ']]:
 			classname.box.delete(0)
 			classname.get_fields()
 			classname.box.update_idletasks()
 			classname.box.current(classname.value_of_current_selection)
 					
-		for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in ['',-1]]:
+		for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in ['',-1, ' ']]:
 			classname.box.delete(0)
 			classname.get_fields()
 			classname.box.update_idletasks()
@@ -241,13 +241,13 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 			classname.get_current_index()
 			classname.box.update_idletasks()
 			
-		for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in ['',-1]]:
+		for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in ['',-1,' ']]:
 			classname.box.delete(0)
 			classname.get_fields()
 			classname.box.update_idletasks()
 			classname.box.current(classname.value_of_current_selection)
 					
-		for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in ['',-1]]:
+		for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in ['',-1, ' ']]:
 			classname.box.delete(0)
 			classname.get_fields()
 			classname.box.update_idletasks()
@@ -280,7 +280,7 @@ class Interface_ComboBox(metaclass=IterableComboBox):
 			self.txt_size_ascii = '#4'
 		
 		else:
-			self.txt_size_ascii = '#4'
+			self.txt_size_ascii = '#2'
 		
 		return self.txt_size_ascii	
 	
@@ -468,7 +468,9 @@ class Interface_ComboBoxCST(metaclass=IterableComboBoxCST):
 					self.valuesource.append(chain2)
 					self.valuesource_edit.append(classname.get_val())
 				else:
-					pass
+					chain2 = ''.join(classname.txt_size_ascii + ' ')
+					self.valuesource.append(chain2)
+					self.valuesource_edit.append(classname.get_val())
 			
 			else:
 				if classname.get_val() != '':
@@ -476,7 +478,9 @@ class Interface_ComboBoxCST(metaclass=IterableComboBoxCST):
 					self.valuesource.append(chain2)
 					self.valuesource_edit.append(classname.get_val())
 				else:
-					pass
+					chain2 = ''.join(classname.txt_size_ascii + ' ')
+					self.valuesource.append(chain2)
+					self.valuesource_edit.append(classname.get_val())
 
 		self.valuesource.append('\x20\x20\x20\x20')
 		self.valuesource_edit.append('....')
@@ -580,7 +584,9 @@ class Interface_ComboBoxSDL(metaclass=IterableComboBoxSDL):
 					self.valuesource.append(chain2)
 					self.valuesource_edit.append(classname.get_val())
 				else:
-					pass
+					chain2 = ''.join(classname.txt_size_ascii + ' ')
+					self.valuesource.append(chain2)
+					self.valuesource_edit.append(classname.get_val())
 			
 			else:
 				if classname.get_val() != '':
@@ -588,7 +594,9 @@ class Interface_ComboBoxSDL(metaclass=IterableComboBoxSDL):
 					self.valuesource.append(chain2)
 					self.valuesource_edit.append(classname.get_val())
 				else:
-					pass
+					chain2 = ''.join(classname.txt_size_ascii + ' ')
+					self.valuesource.append(chain2)
+					self.valuesource_edit.append(classname.get_val())
 
 		self.valuesource.append('\x20\x20\x20\x20')
 		self.valuesource_edit.append('....')
@@ -937,7 +945,7 @@ class Interface_EntryBox(metaclass=IterableEntryBox):
 		self.sup_data = []
 		self.value_of_checkbox = 0
 		self.txt_size_user = ["Grand", "Moyen", "Petit", "Très Petit", '']
-		self.txt_size_ascii = '#4'
+		self.txt_size_ascii = '#2'
 
 
 	def entry_free(self, name, row_label, column_label, row_entry, column_entry):
@@ -957,12 +965,12 @@ class Interface_EntryBox(metaclass=IterableEntryBox):
 	def newselection(self, event):
 		self.value_of_entry = self.entry.get()
 		if self.name != 'profile_name':
-			for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in [-1, '-1','']]: # added an integrer
+			for classname in [classname for classname in Interface_ComboBoxCST if classname.value_of_current_selection not in [-1, '-1','',' ']]:
 				classname.get_fields()
 				classname.box.update_idletasks()
 				classname.box.current(classname.value_of_current_selection)
 			
-			for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in [-1, '-1', '']]: # added an integrer
+			for classname in [classname for classname in Interface_ComboBoxSDL if classname.value_of_current_selection not in [-1, '-1','', ' ']]:
 				classname.get_fields()
 				classname.box.update_idletasks()
 				classname.box.current(classname.value_of_current_selection)	
@@ -1008,7 +1016,7 @@ class Interface_EntryBox(metaclass=IterableEntryBox):
 			self.box_txt.current(default_value)
 		
 		else:
-			self.box_txt.current(0)
+			self.box_txt.current(2)
 		
 		self.box_txt.grid(column=column_combo, row=row_combo)
 		
@@ -1034,7 +1042,7 @@ class Interface_EntryBox(metaclass=IterableEntryBox):
 			self.txt_size_ascii = '#4'
 			
 		else:
-			self.txt_size_ascii = '#4'
+			self.txt_size_ascii = '#2'
 			
 		return self.txt_size_ascii
 
