@@ -1340,9 +1340,10 @@ class Special_Functions():
 			
 			counter = 0
 			while self.count != 0:
-				print("###")
-				print(counter)
-				print("###")
+				print("####  ####  ####  ####  ####  ####  ####  ####")
+				print(" [ DEBUT GRAVURE BATCH ] ")
+				#print(counter)
+				#print("###")
 				if clswl.waitinglist.get(0) == '':
 					clswl.waitinglist.delete(0)
 					self.break_current_command = 1
@@ -1466,7 +1467,9 @@ class Special_Functions():
 					
 					if clswl.waitinglist.get(0) == '':
 						clswl.waitinglist.delete(0)
-						print("#########")
+						
+						print(" [  FIN GRAVURE BATCH  ] ")
+						print("####  ####  ####  ####  ####  ####  ####  ####")
 						clswl.waitinglist.update_idletasks()
 						self.parent.update_idletasks()
 						self.count = 0
